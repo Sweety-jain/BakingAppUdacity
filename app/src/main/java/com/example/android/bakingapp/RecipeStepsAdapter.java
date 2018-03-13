@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -50,14 +51,16 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     private ArrayList<RecipeSteps> verticalRecipesList;
     private Context context;
     private String recipeName;
+    String mRecipeStepDetails;
     String recipeJSONStr;
     private int pos;
     String var[];
 
-    public RecipeStepsAdapter(ArrayList<RecipeSteps> verticalList, String mrecipeJsonString, Context context) {
+    public RecipeStepsAdapter(ArrayList<RecipeSteps> verticalList, String mrecipeJsonString,String recipeStepDetails, Context context) {
+        this.mRecipeStepDetails = recipeStepDetails;
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
-        Log.d("inRecipeAdapter", "json string" + recipeJSONStr);
+        Log.d("inRecipeAdapter", "steps" + mRecipeStepDetails);
         this.context = context;
     }
 
@@ -151,7 +154,15 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
         public RecipesStepsViewHolder(View itemView) {
             super(itemView);
+            int i=0;
+            final String[] recipeSteps = mRecipeStepDetails.split("end");
 
+            // Log.d("Sweety",""+recipeStepsDetails);
+            //String[] array;
+
+         //  for(i=0;i<recipeSteps.length;i++){
+            //   Log.d("InRecipeStepViewHolder",""+ Arrays.toString(recipeSteps));
+           //}
             String s = Integer.toString(pos);
             recipeStepTextView = (Button) itemView.findViewById(R.id.recipeStepButtonId);
             Log.d("recipeStringng",""+recipeJSONStr);
@@ -160,14 +171,19 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                 public void onClick(View view) {
                     int position = (int) recipeStepTextView.getTag();
                     String s = Integer.toString(position);
+                    Log.d("stepclicked",""+recipeSteps[position]);
+                    Intent intent = new Intent(view.getContext(),RecipeDetailStepActivity.class);
+                    intent.putExtra("recipeStepTitle",recipeStepTextView.getText().toString());
+                    intent.putExtra("recipeStepDetails",recipeSteps[position]);
+                    context.startActivity(intent);
                     //getRecipeDetails(recipeJSONStr,)
 //                    try {
 //                     //   getRecipeDetails(recipeJSONStr,recipeStepTextView.getText().toString());
 //                    } catch (JSONException e) {
 //                        e.printStackTrace();
 //                    }
-                    Intent intent = new Intent(view.getContext(), RecipeStepActivity.class);
-                    Bundle bundle = new Bundle();
+                 //   Intent intent = new Intent(view.getContext(), RecipeStepActivity.class);
+                   // Bundle bundle = new Bundle();
                   /*  String ingredient;
                     Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
                     Bundle bundle = new Bundle();

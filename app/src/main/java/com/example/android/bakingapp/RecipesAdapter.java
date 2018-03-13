@@ -375,7 +375,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                             String thumbnailUrl = recipeSteps.getString(THUMBNAIL_URL);
 
                             getRecipeDetails[j] = shortDescription + "> " + description + "> "+
-                                    videoURL + "> " + thumbnailUrl;
+                                    videoURL + "> " + thumbnailUrl + "end";
                             Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
 
                     }

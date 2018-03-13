@@ -93,6 +93,7 @@ public class RecipeDetailFragment extends Fragment {
         description = getArguments().getString("recipeStepDesc");
             videoUrls = getArguments().getString("recipeVideoUrl");
             thumbNails = getArguments().getString("recipeThumbnail");
+            recipeStepDetails = getArguments().getString("recipeStepDetails");
         int i =stepsShortDesc.length();
 
         String s = String.valueOf(i);
@@ -107,7 +108,7 @@ public class RecipeDetailFragment extends Fragment {
                     break;
                 }
            }
-            recipeStepsAdapter = new RecipeStepsAdapter(mRecipeStepsList,recipeJSONStr,getContext());
+            recipeStepsAdapter = new RecipeStepsAdapter(mRecipeStepsList,recipeJSONStr,recipeStepDetails,getContext());
             recipesStepsRecyclerView.setAdapter(recipeStepsAdapter);
             recipeStepsAdapter.notifyDataSetChanged();
             Log.d("ssssssss", ""+s);
