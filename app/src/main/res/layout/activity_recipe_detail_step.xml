@@ -32,12 +32,14 @@
         android:background="@color/colorPrimary"
 
         />
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <FrameLayout android:id="@+id/step_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
+    </ScrollView>
 
 </LinearLayout>
 

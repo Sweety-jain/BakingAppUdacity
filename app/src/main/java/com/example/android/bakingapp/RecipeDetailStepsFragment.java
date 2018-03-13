@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -51,6 +53,11 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
     String videoUrl;
     private Long playPosition;
     private ImageView noVideoImage;
+    private FloatingActionButton nextStep;
+    private FloatingActionButton previousStep;
+    private int adapterPosition;
+    int recipeStepsArraySize;
+
     public RecipeDetailStepsFragment(){
 
     }
@@ -58,14 +65,21 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
-        TextView recipeStepTv = (TextView)rootView.findViewById(R.id.recipeStepId);
+        final TextView recipeStepTv = (TextView)rootView.findViewById(R.id.recipeStepId);
+        nextStep = (FloatingActionButton)rootView.findViewById(R.id.nextStep);
+
+        previousStep = (FloatingActionButton)rootView.findViewById(R.id.previousStep);
         noVideoImage = (ImageView)rootView.findViewById(R.id.noVideoImage);
-        if(getArguments() != null){
+
             recipeDetails = getArguments().getString("recipeStepDetails");
+            final String[] recipeStepsArray = getArguments().getStringArray("recipestepsarray");
+            recipeStepsArraySize = recipeStepsArray.length;
             final String[] recipeSteps = recipeDetails.split(">");
             recipeStepTv.setText(recipeSteps[1]);
             videoUrl = recipeSteps[2];
-        }
+            adapterPosition = getArguments().getInt("adapterposition");
+
+
         exoPlayerView = (SimpleExoPlayerView)rootView.findViewById(R.id.stepVideoExoPlayer);
 
 
@@ -93,6 +107,62 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
                 Log.e("Exolplayere", "" + e);
             }
         }
+        nextStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapterPosition =adapterPosition + 1;
+                Log.d("adapterPosition",""+String.valueOf(adapterPosition));
+                if(adapterPosition < recipeStepsArraySize){
+                    getActivity().setTitle("hi");
+                    recipeStepTv.setVisibility(View.VISIBLE);
+                    String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
+                    recipeStepTv.setText(recipeStepsArr[1]);
+                    videoUrl = recipeStepsArr[2];
+                    try {
+                        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                        LoadControl loadControl = new DefaultLoadControl();
+                        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
+                        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+                        Uri videoUri = Uri.parse(videoUrl);
+                        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                        MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
+                        exoPlayerView.setPlayer(exoPlayer);
+                        exoPlayerView.setVisibility(View.VISIBLE);
+                        exoPlayer.prepare(mediaSource);
+                        exoPlayer.setPlayWhenReady(true);
+                        noVideoImage.setVisibility(View.INVISIBLE);
+                    }catch(Exception e){
+                        Log.e("Exolplayere", "" + e);
+                    }
+                }else{
+                    Toast.makeText(getContext(),"clicked",Toast.LENGTH_LONG).show();
+                    Log.d("inelseeee",""+adapterPosition);
+                    recipeStepTv.setVisibility(View.VISIBLE);
+                    String[] recipeStepsArr = recipeStepsArray[adapterPosition-1].split(">");
+                    recipeStepTv.setText(recipeStepsArr[1]);
+                    videoUrl = recipeStepsArr[2];
+                    try {
+                        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                        LoadControl loadControl = new DefaultLoadControl();
+                        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
+                        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+                        Uri videoUri = Uri.parse(videoUrl);
+                        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                        MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
+                        exoPlayerView.setPlayer(exoPlayer);
+                        exoPlayerView.setVisibility(View.VISIBLE);
+                        exoPlayer.prepare(mediaSource);
+                        exoPlayer.setPlayWhenReady(true);
+                        noVideoImage.setVisibility(View.INVISIBLE);
+                    }catch(Exception e){
+                        Log.e("Exolplayere", "" + e);
+                    }
+                    nextStep.setVisibility(View.GONE);
+                }
+            }
+        });
         return rootView;
 
     }

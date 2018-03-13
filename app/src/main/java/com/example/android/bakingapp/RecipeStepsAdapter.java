@@ -175,6 +175,9 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                     Intent intent = new Intent(view.getContext(),RecipeDetailStepActivity.class);
                     intent.putExtra("recipeStepTitle",recipeStepTextView.getText().toString());
                     intent.putExtra("recipeStepDetails",recipeSteps[position]);
+                    intent.putExtra("recipestepsarray",recipeSteps);
+                    intent.putExtra("adapterposition",position);
+
                     context.startActivity(intent);
                     //getRecipeDetails(recipeJSONStr,)
 //                    try {
