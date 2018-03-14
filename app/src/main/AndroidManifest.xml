@@ -19,7 +19,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".RecipeDetailActivity" />
-        <activity android:name=".RecipeDetailStepActivity"></activity>
+        <activity android:name=".RecipeDetailStepActivity" />
+
+        <receiver android:name=".BakingAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
