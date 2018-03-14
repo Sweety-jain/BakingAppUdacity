@@ -1,6 +1,7 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.widget.GridView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+
+import com.example.android.bakingapp.databinding.FragmentBakingRecipesBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +35,8 @@ import java.util.ArrayList;
  */
 
 public class RecipeFragment extends Fragment {
-    private RecyclerView recipesRecyclerView;
+    FragmentBakingRecipesBinding binding;
+   // private RecyclerView recipesRecyclerView;
   //  private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private static final String RECIPE_NAME = "name";
     private static final String TAG = "RecipeDetailFragment";
@@ -78,16 +82,19 @@ public class RecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        final View rootView = inflater.inflate(R.layout.fragment_baking_recipes, container, false);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_baking_recipes,container,false);
+        //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
+        final View rootView = binding.getRoot();
+       // final View rootView = inflater.inflate(R.layout.fragment_baking_recipes, container, false);
 
         // Get a reference to the GridView in the fragment_master_list xml layout file
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        recipesRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewVerticaList);
+     //   recipesRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewVerticaList);
+
         Connection connection = new Connection();
         connection.execute();
-recipesRecyclerView.setLayoutManager(verticalLayoutManager);
+binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the image resources to display
         Log.d("InRecipeFragment","jsonstrimng: "+recipeJSONStr);
@@ -252,7 +259,7 @@ recipesRecyclerView.setLayoutManager(verticalLayoutManager);
                 }
                 Log.d("sweety","jsonstring"+recipeJSONStr);
                 mRecipesAdapter = new RecipesAdapter(mRecipeNamesList,recipeJSONStr,getContext());
-                recipesRecyclerView.setAdapter(mRecipesAdapter);
+                binding.idRecyclerViewVerticaList.setAdapter(mRecipesAdapter);
                 mRecipesAdapter.notifyDataSetChanged();
             }
             super.onPostExecute(strings);

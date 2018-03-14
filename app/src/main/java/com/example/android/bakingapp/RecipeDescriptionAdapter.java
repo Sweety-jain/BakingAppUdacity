@@ -2,6 +2,7 @@
 package com.example.android.bakingapp;
 
         import android.content.Context;
+        import android.databinding.DataBindingUtil;
         import android.os.AsyncTask;
         import android.os.Bundle;
         import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,8 @@ package com.example.android.bakingapp;
         import android.widget.ImageView;
         import android.widget.TextView;
 
+        import com.example.android.bakingapp.databinding.RecipesListViewItemBinding;
+
         import org.json.JSONArray;
         import org.json.JSONException;
         import org.json.JSONObject;
@@ -42,6 +45,7 @@ package com.example.android.bakingapp;
  */
 
 public class RecipeDescriptionAdapter extends RecyclerView.Adapter<RecipeDescriptionAdapter.RecipesDescriptionViewHolder> {
+    RecipesListViewItemBinding binding;
     private static final String RECIPE_NAME = "name";
     private static final String TAG = "RecipeDetailFragment";
     private static final String RECIPE_INGREDIENTS = "ingredients";
@@ -64,6 +68,8 @@ public class RecipeDescriptionAdapter extends RecyclerView.Adapter<RecipeDescrip
 
     @Override
     public RecipesDescriptionViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+       // binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),R.layout.fragment_activity_recipe_detail_steps,viewGroup,false);
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recipes_list_view_item, viewGroup, false);
         view.setTag(pos);
         return new RecipesDescriptionViewHolder(view);

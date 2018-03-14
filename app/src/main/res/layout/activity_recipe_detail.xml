@@ -10,11 +10,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.-->
 
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- LinearLayout for holding three Android-Me images -->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/android_me_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,4 +41,4 @@
 
     </LinearLayout>
 
-
+</layout>

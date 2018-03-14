@@ -3,6 +3,7 @@ package com.example.android.bakingapp;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.example.android.bakingapp.databinding.ActivityRecipeDetailBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RecipeDetailActivity extends AppCompatActivity {
+    ActivityRecipeDetailBinding binding ;
     private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private static final String RECIPE_NAME = "name";
     private static final String TAG = "RecipeDetailFragment";
@@ -40,7 +44,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_detail);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_recipe_detail);
+        //setContentView(R.layout.activity_recipe_detail);
 
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
@@ -66,8 +71,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
           //  String[] recipeSteps = iin.getStringArrayExtra("recipesteps");
           //   Log.d("InRecipeDetailsActivity",""+ recipeShortDesc[1]);
 
-        android.support.v7.widget.Toolbar toolbar =(android.support.v7.widget.Toolbar) findViewById(R.id.titleStepToolbar);
-        toolbar.setTitle(j);
+       // android.support.v7.widget.Toolbar toolbar =(android.support.v7.widget.Toolbar) findViewById(R.id.titleStepToolbar);
+        binding.titleStepToolbar.setTitle(j);
+       // toolbar.setTitle(j);
                 RecipeDetailFragment recipeTitleFragment =new RecipeDetailFragment();
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         recipeTitleFragment.setArguments(b);

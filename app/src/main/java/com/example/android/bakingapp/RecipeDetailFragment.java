@@ -1,5 +1,6 @@
 package com.example.android.bakingapp;
 
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.example.android.bakingapp.databinding.FragmentRecipeDetailsBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +36,7 @@ import java.util.Arrays;
  */
 
 public class RecipeDetailFragment extends Fragment {
+    FragmentRecipeDetailsBinding binding;
     private ArrayList<RecipeSteps> mRecipeStepsList = new ArrayList();
     private static final String RECIPE_NAME = "name";
     private static final String TAG = "RecipeDetailFragment";
@@ -51,7 +55,7 @@ public class RecipeDetailFragment extends Fragment {
     private String recipeJSONStr;
     private RecipesAdapter recipeAdapter;
     private RecipeStepsAdapter recipeStepsAdapter;
-    private RecyclerView recipesStepsRecyclerView;
+  //  private RecyclerView recipesStepsRecyclerView;
     public RecipeDetailFragment(){
 
     }
@@ -78,12 +82,15 @@ public class RecipeDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+       // final View rootView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_recipe_details,container,false);
+        //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
+        final View rootView = binding.getRoot();
     //Connection connection = new Connection();
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        recipesStepsRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewRecipeStepsList);
-        recipesStepsRecyclerView.setLayoutManager(verticalLayoutManager);
+        binding.idRecyclerViewRecipeStepsList.setLayoutManager(verticalLayoutManager);
+       // recipesStepsRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewRecipeStepsList);
+        //recipesStepsRecyclerView.setLayoutManager(verticalLayoutManager);
         Log.d("RecipeDetailFragment","this");
 
         if(getArguments()!= null) {
@@ -109,16 +116,18 @@ public class RecipeDetailFragment extends Fragment {
                 }
            }
             recipeStepsAdapter = new RecipeStepsAdapter(mRecipeStepsList,recipeJSONStr,recipeStepDetails,getContext());
-            recipesStepsRecyclerView.setAdapter(recipeStepsAdapter);
+         //   recipesStepsRecyclerView.setAdapter(recipeStepsAdapter);
+            binding.idRecyclerViewRecipeStepsList.setAdapter(recipeStepsAdapter);
             recipeStepsAdapter.notifyDataSetChanged();
             Log.d("ssssssss", ""+s);
            // if (strtext == null) {
              //   Log.d("ssssssss", "" + strtext);
             //}
          //   RecipeStepsAdapter recipeStepsAdapter = new RecipeStepsAdapter();
-           TextView tv = (TextView)rootView.findViewById(R.id.recipeStepTVId);
-            tv.setMovementMethod(new ScrollingMovementMethod());
-            tv.setText(ingredientText);
+          // TextView tv = (TextView)rootView.findViewById(R.id.recipeStepTVId);
+           binding.recipeStepTVId.setMovementMethod(new ScrollingMovementMethod());
+           // tv.setMovementMethod(new ScrollingMovementMethod());
+            binding.recipeStepTVId.setText(ingredientText);
         }
 Log.d(TAG,"recipestring"+recipeJSONStr);
         /*connection.execute();

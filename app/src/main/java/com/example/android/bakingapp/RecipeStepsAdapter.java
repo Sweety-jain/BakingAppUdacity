@@ -137,7 +137,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
                     getRecipeDetails[j] = shortDescription + "> " + description + "> "+
                             videoURL + "> " + thumbnailUrl;
-                 //   getRecipeDetails[j].replaceAll(,"");
+                    getRecipeDetails[j].replaceAll("","");
                     Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
 
                 }
