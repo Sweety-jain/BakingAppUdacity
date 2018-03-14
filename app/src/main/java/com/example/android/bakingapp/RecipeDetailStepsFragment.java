@@ -1,6 +1,7 @@
 package com.example.android.bakingapp;
 
 import android.app.Fragment;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.bakingapp.databinding.FragmentActivityRecipeDetailStepsBinding;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -52,13 +54,14 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     SimpleExoPlayer exoPlayer;
     String videoUrl;
     private Long playPosition;
-    private ImageView noVideoImage;
-    private FloatingActionButton nextStep;
-    private FloatingActionButton previousStep;
+   // private ImageView noVideoImage;
+   // private FloatingActionButton nextStep;
+   // private FloatingActionButton previousStep;
     private int adapterPosition;
     int recipeStepsArraySize;
-    private TextView recipeStepTv;
-    private TextView recipeShortDescription;
+   FragmentActivityRecipeDetailStepsBinding binding;
+   // private TextView recipeStepTv;
+    //private TextView recipeShortDescription;
 
     public RecipeDetailStepsFragment() {
 
@@ -67,21 +70,26 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
-        recipeStepTv = (TextView) rootView.findViewById(R.id.recipeStepId);
-        recipeShortDescription = (TextView) rootView.findViewById(R.id.recipeShortDescId);
-        nextStep = (FloatingActionButton) rootView.findViewById(R.id.nextStep);
-        exoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.stepVideoExoPlayer);
+         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_activity_recipe_detail_steps,container,false);
+      //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
+        final View rootView = binding.getRoot();
+      //  binding.recipeStepId.setText();
+      //  recipeStepTv = (TextView) rootView.findViewById(R.id.recipeStepId);
+      //  recipeShortDescription = (TextView) rootView.findViewById(R.id.recipeShortDescId);
+      //  nextStep = (FloatingActionButton) rootView.findViewById(R.id.nextStep);
+      //  exoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.stepVideoExoPlayer);
 
-        previousStep = (FloatingActionButton) rootView.findViewById(R.id.previousStep);
-        noVideoImage = (ImageView) rootView.findViewById(R.id.noVideoImage);
+        //previousStep = (FloatingActionButton) rootView.findViewById(R.id.previousStep);
+      //  noVideoImage = (ImageView) rootView.findViewById(R.id.noVideoImage);
 
         recipeDetails = getArguments().getString("recipeStepDetails");
         final String[] recipeStepsArray = getArguments().getStringArray("recipestepsarray");
         recipeStepsArraySize = recipeStepsArray.length;
         final String[] recipeSteps = recipeDetails.split(">");
-        recipeShortDescription.setText(recipeSteps[0]);
-        recipeStepTv.setText(recipeSteps[1]);
+       // recipeShortDescription.setText(recipeSteps[0]);
+        binding.recipeShortDescId.setText(recipeSteps[0]);
+       // recipeStepTv.setText(recipeSteps[1]);
+        binding.recipeStepId.setText(recipeSteps[1]);
         videoUrl = recipeSteps[2];
         adapterPosition = getArguments().getInt("adapterposition");
         Log.d("adapterpositionnnn",""+String.valueOf(adapterPosition));
@@ -89,7 +97,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
         setUpViews(videoUrl);
 
 
-        nextStep.setOnClickListener(new View.OnClickListener() {
+        binding.nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -102,25 +110,29 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 Log.d("adapterPosition", "" + String.valueOf(adapterPosition));
                 Log.d("recipesteparraysize",""+String.valueOf(recipeStepsArraySize));
                 if(adapterPosition == recipeStepsArraySize-1){
-                    nextStep.setVisibility(View.GONE);
-                    previousStep.setVisibility(View.VISIBLE);
+                    binding.nextStep.setVisibility(View.GONE);
+                   binding.previousStep.setVisibility(View.VISIBLE);
                 }else {
                     exoPlayer.stop();
                     // getActivity().setTitle("hi");
-                    recipeStepTv.setVisibility(View.VISIBLE);
-                    recipeShortDescription.setVisibility((View.VISIBLE));
+                   // recipeStepTv.setVisibility(View.VISIBLE);
+                    binding.recipeStepId.setVisibility(View.VISIBLE);
+                  //  recipeShortDescription.setVisibility((View.VISIBLE));
+                    binding.recipeShortDescId.setVisibility((View.VISIBLE));
                     String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
-                    recipeShortDescription.setText(recipeStepsArr[0]);
-                    recipeStepTv.setText(recipeStepsArr[1]);
+                  //  recipeShortDescription.setText(recipeStepsArr[0]);
+                    binding.recipeShortDescId.setText(recipeStepsArr[0]);
+                  //  recipeStepTv.setText(recipeStepsArr[1]);
+                    binding.recipeStepId.setText(recipeStepsArr[1]);
                     videoUrl = recipeStepsArr[2];
                     setUpViews(videoUrl);
-                    nextStep.setVisibility(View.VISIBLE);
-                    previousStep.setVisibility(View.VISIBLE);
+                   binding.nextStep.setVisibility(View.VISIBLE);
+                    binding.previousStep.setVisibility(View.VISIBLE);
                 }
 
             }
         });
-        previousStep.setOnClickListener(new View.OnClickListener() {
+        binding.previousStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -131,20 +143,24 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 }
                 Log.d("adapterPositionprev", "" + String.valueOf(adapterPosition));
                 if(adapterPosition == -1){
-                    previousStep.setVisibility(View.GONE);
-                    nextStep.setVisibility(View.VISIBLE);
+                     binding.previousStep.setVisibility(View.GONE);
+                    binding.nextStep.setVisibility(View.VISIBLE);
                 }else {
                     exoPlayer.stop();
                     // getActivity().setTitle("hi");
-                    recipeStepTv.setVisibility(View.VISIBLE);
-                    recipeShortDescription.setVisibility(View.VISIBLE);
+                 //   recipeStepTv.setVisibility(View.VISIBLE);
+                    binding.recipeStepId.setVisibility(View.VISIBLE);
+                  //  recipeShortDescription.setVisibility(View.VISIBLE);
+                    binding.recipeShortDescId.setVisibility(View.VISIBLE);
                     String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
-                    recipeShortDescription.setText(recipeStepsArr[0]);
-                    recipeStepTv.setText(recipeStepsArr[1]);
+                    //recipeShortDescription.setText(recipeStepsArr[0]);
+                    binding.recipeShortDescId.setText(recipeStepsArr[0]);
+                  //  recipeStepTv.setText(recipeStepsArr[1]);
+                    binding.recipeStepId.setText(recipeStepsArr[1]);
                     videoUrl = recipeStepsArr[2];
                     setUpViews(videoUrl);
-                    previousStep.setVisibility(View.VISIBLE);
-                    nextStep.setVisibility(View.VISIBLE);
+                    binding.previousStep.setVisibility(View.VISIBLE);
+                   binding.nextStep.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -156,9 +172,10 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     public void setUpViews(String videoUrl) {
         if (videoUrl.equals(" ")) {
             Log.d("inside if", "" + videoUrl);
-            exoPlayerView.setVisibility(View.INVISIBLE);
-            noVideoImage.setImageResource(R.drawable.no_video_image);
-            noVideoImage.setVisibility(View.VISIBLE);
+           // exoPlayerView.setVisibility(View.INVISIBLE);
+            binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
+
+            binding.noVideoImage.setVisibility(View.VISIBLE);
         } else {
             try {
                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -169,11 +186,13 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
                 ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
                 MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
-                exoPlayerView.setPlayer(exoPlayer);
-                exoPlayerView.setVisibility(View.VISIBLE);
+               // exoPlayerView.setPlayer(exoPlayer);
+                binding.stepVideoExoPlayer.setPlayer(exoPlayer);
+                //exoPlayerView.setVisibility(View.VISIBLE);
+                binding.stepVideoExoPlayer.setVisibility(View.VISIBLE);
                 exoPlayer.prepare(mediaSource);
                 exoPlayer.setPlayWhenReady(true);
-                noVideoImage.setVisibility(View.INVISIBLE);
+               binding.noVideoImage.setVisibility(View.INVISIBLE);
             } catch (Exception e) {
                 Log.e("Exolplayere", "" + e);
             }
