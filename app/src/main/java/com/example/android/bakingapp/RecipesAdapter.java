@@ -419,7 +419,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         String recipeThumbnail = Arrays.toString(thumbNailUrl);
                         String stepDetails  = Arrays.toString(recipeStepDetails);
                         String r = Arrays.toString(recipesteps);
-                      //Log.d("InREciepesteps",""+Arrays.toString(recipesteps));
+
+                      Log.d("InREciepesteps",""+r);
 
                       //  bundle.putString("recipeTitle", recipeTextView.getText().toString());
                         //bundle.putString("jsonstring", ingredient);

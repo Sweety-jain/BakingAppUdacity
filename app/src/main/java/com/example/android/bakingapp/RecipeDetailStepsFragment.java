@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * Created by namit on 3/12/2018.
  */
 
-public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
+public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     String recipeDetails;
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
@@ -57,43 +57,114 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
     private FloatingActionButton previousStep;
     private int adapterPosition;
     int recipeStepsArraySize;
+    private TextView recipeStepTv;
+    private TextView recipeShortDescription;
 
-    public RecipeDetailStepsFragment(){
+    public RecipeDetailStepsFragment() {
 
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
-        final TextView recipeStepTv = (TextView)rootView.findViewById(R.id.recipeStepId);
-        nextStep = (FloatingActionButton)rootView.findViewById(R.id.nextStep);
+        recipeStepTv = (TextView) rootView.findViewById(R.id.recipeStepId);
+        recipeShortDescription = (TextView) rootView.findViewById(R.id.recipeShortDescId);
+        nextStep = (FloatingActionButton) rootView.findViewById(R.id.nextStep);
+        exoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.stepVideoExoPlayer);
 
-        previousStep = (FloatingActionButton)rootView.findViewById(R.id.previousStep);
-        noVideoImage = (ImageView)rootView.findViewById(R.id.noVideoImage);
+        previousStep = (FloatingActionButton) rootView.findViewById(R.id.previousStep);
+        noVideoImage = (ImageView) rootView.findViewById(R.id.noVideoImage);
 
-            recipeDetails = getArguments().getString("recipeStepDetails");
-            final String[] recipeStepsArray = getArguments().getStringArray("recipestepsarray");
-            recipeStepsArraySize = recipeStepsArray.length;
-            final String[] recipeSteps = recipeDetails.split(">");
-            recipeStepTv.setText(recipeSteps[1]);
-            videoUrl = recipeSteps[2];
-            adapterPosition = getArguments().getInt("adapterposition");
+        recipeDetails = getArguments().getString("recipeStepDetails");
+        final String[] recipeStepsArray = getArguments().getStringArray("recipestepsarray");
+        recipeStepsArraySize = recipeStepsArray.length;
+        final String[] recipeSteps = recipeDetails.split(">");
+        recipeShortDescription.setText(recipeSteps[0]);
+        recipeStepTv.setText(recipeSteps[1]);
+        videoUrl = recipeSteps[2];
+        adapterPosition = getArguments().getInt("adapterposition");
+        Log.d("adapterpositionnnn",""+String.valueOf(adapterPosition));
+
+        setUpViews(videoUrl);
 
 
-        exoPlayerView = (SimpleExoPlayerView)rootView.findViewById(R.id.stepVideoExoPlayer);
+        nextStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if(adapterPosition == -1)
+                {
+                    adapterPosition = adapterPosition + 2;
+                }else {
+                    adapterPosition = adapterPosition + 1;
+                }
+                Log.d("adapterPosition", "" + String.valueOf(adapterPosition));
+                Log.d("recipesteparraysize",""+String.valueOf(recipeStepsArraySize));
+                if(adapterPosition == recipeStepsArraySize-1){
+                    nextStep.setVisibility(View.GONE);
+                    previousStep.setVisibility(View.VISIBLE);
+                }else {
+                    exoPlayer.stop();
+                    // getActivity().setTitle("hi");
+                    recipeStepTv.setVisibility(View.VISIBLE);
+                    recipeShortDescription.setVisibility((View.VISIBLE));
+                    String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
+                    recipeShortDescription.setText(recipeStepsArr[0]);
+                    recipeStepTv.setText(recipeStepsArr[1]);
+                    videoUrl = recipeStepsArr[2];
+                    setUpViews(videoUrl);
+                    nextStep.setVisibility(View.VISIBLE);
+                    previousStep.setVisibility(View.VISIBLE);
+                }
 
-            if (videoUrl.equals(" ")) {
-                Log.d("inside if",""+videoUrl);
-                exoPlayerView.setVisibility(View.INVISIBLE);
-                noVideoImage.setImageResource(R.drawable.no_video_image);
-                noVideoImage.setVisibility(View.VISIBLE);
-            } else {
-                try {
-                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                    LoadControl loadControl = new DefaultLoadControl();
-                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
-                    exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            }
+        });
+        previousStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(adapterPosition == recipeStepsArraySize-1){
+                    adapterPosition =adapterPosition - 2;
+                }else {
+                    adapterPosition = adapterPosition - 1;
+                }
+                Log.d("adapterPositionprev", "" + String.valueOf(adapterPosition));
+                if(adapterPosition == -1){
+                    previousStep.setVisibility(View.GONE);
+                    nextStep.setVisibility(View.VISIBLE);
+                }else {
+                    exoPlayer.stop();
+                    // getActivity().setTitle("hi");
+                    recipeStepTv.setVisibility(View.VISIBLE);
+                    recipeShortDescription.setVisibility(View.VISIBLE);
+                    String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
+                    recipeShortDescription.setText(recipeStepsArr[0]);
+                    recipeStepTv.setText(recipeStepsArr[1]);
+                    videoUrl = recipeStepsArr[2];
+                    setUpViews(videoUrl);
+                    previousStep.setVisibility(View.VISIBLE);
+                    nextStep.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+        return rootView;
+
+    }
+
+    public void setUpViews(String videoUrl) {
+        if (videoUrl.equals(" ")) {
+            Log.d("inside if", "" + videoUrl);
+            exoPlayerView.setVisibility(View.INVISIBLE);
+            noVideoImage.setImageResource(R.drawable.no_video_image);
+            noVideoImage.setVisibility(View.VISIBLE);
+        } else {
+            try {
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                LoadControl loadControl = new DefaultLoadControl();
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
                 Uri videoUri = Uri.parse(videoUrl);
                 DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
                 ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -103,82 +174,24 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment{
                 exoPlayer.prepare(mediaSource);
                 exoPlayer.setPlayWhenReady(true);
                 noVideoImage.setVisibility(View.INVISIBLE);
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.e("Exolplayere", "" + e);
             }
         }
-        nextStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapterPosition =adapterPosition + 1;
-                Log.d("adapterPosition",""+String.valueOf(adapterPosition));
-                if(adapterPosition < recipeStepsArraySize){
-                    getActivity().setTitle("hi");
-                    recipeStepTv.setVisibility(View.VISIBLE);
-                    String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
-                    recipeStepTv.setText(recipeStepsArr[1]);
-                    videoUrl = recipeStepsArr[2];
-                    try {
-                        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                        LoadControl loadControl = new DefaultLoadControl();
-                        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
-                        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-                        Uri videoUri = Uri.parse(videoUrl);
-                        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                        MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
-                        exoPlayerView.setPlayer(exoPlayer);
-                        exoPlayerView.setVisibility(View.VISIBLE);
-                        exoPlayer.prepare(mediaSource);
-                        exoPlayer.setPlayWhenReady(true);
-                        noVideoImage.setVisibility(View.INVISIBLE);
-                    }catch(Exception e){
-                        Log.e("Exolplayere", "" + e);
-                    }
-                }else{
-                    Toast.makeText(getContext(),"clicked",Toast.LENGTH_LONG).show();
-                    Log.d("inelseeee",""+adapterPosition);
-                    recipeStepTv.setVisibility(View.VISIBLE);
-                    String[] recipeStepsArr = recipeStepsArray[adapterPosition-1].split(">");
-                    recipeStepTv.setText(recipeStepsArr[1]);
-                    videoUrl = recipeStepsArr[2];
-                    try {
-                        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                        LoadControl loadControl = new DefaultLoadControl();
-                        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
-                        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-                        Uri videoUri = Uri.parse(videoUrl);
-                        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                        MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
-                        exoPlayerView.setPlayer(exoPlayer);
-                        exoPlayerView.setVisibility(View.VISIBLE);
-                        exoPlayer.prepare(mediaSource);
-                        exoPlayer.setPlayWhenReady(true);
-                        noVideoImage.setVisibility(View.INVISIBLE);
-                    }catch(Exception e){
-                        Log.e("Exolplayere", "" + e);
-                    }
-                    nextStep.setVisibility(View.GONE);
-                }
-            }
-        });
-        return rootView;
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-       // Log.i(TAG,"onPause");
+        // Log.i(TAG,"onPause");
 
-            if (exoPlayer != null ) {
-                exoPlayer.setPlayWhenReady(false);
-                playPosition = exoPlayer.getCurrentPosition();
-                exoPlayer.stop();
-                exoPlayer.release();
-                exoPlayer = null;
-            }
+        if (exoPlayer != null) {
+            exoPlayer.setPlayWhenReady(false);
+            playPosition = exoPlayer.getCurrentPosition();
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
 
     }
 }
