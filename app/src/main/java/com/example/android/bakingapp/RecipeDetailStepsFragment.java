@@ -175,8 +175,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
            // exoPlayerView.setVisibility(View.INVISIBLE);
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
 
-            binding.noVideoImage.setVisibility(View.VISIBLE);
-        } else {
+                   } else {
             try {
                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
                 LoadControl loadControl = new DefaultLoadControl();
@@ -192,7 +191,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 binding.stepVideoExoPlayer.setVisibility(View.VISIBLE);
                 exoPlayer.prepare(mediaSource);
                 exoPlayer.setPlayWhenReady(true);
-               binding.noVideoImage.setVisibility(View.INVISIBLE);
+
             } catch (Exception e) {
                 Log.e("Exolplayere", "" + e);
             }

@@ -55,13 +55,15 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     String recipeJSONStr;
     private int pos;
     String var[];
+    Boolean mtabView;
 
-    public RecipeStepsAdapter(ArrayList<RecipeSteps> verticalList, String mrecipeJsonString,String recipeStepDetails, Context context) {
+    public RecipeStepsAdapter(Boolean tabView, ArrayList<RecipeSteps> verticalList, String mrecipeJsonString,String recipeStepDetails, Context context) {
         this.mRecipeStepDetails = recipeStepDetails;
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
         Log.d("inRecipeAdapter", "steps" + mRecipeStepDetails);
         this.context = context;
+        this.mtabView = tabView;
     }
 
     @Override
@@ -157,6 +159,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
             super(itemView);
             int i=0;
             final String[] recipeSteps = mRecipeStepDetails.split("end");
+            final RecipeDetailActivity myParentActivity = (RecipeDetailActivity)context;
 
             // Log.d("Sweety",""+recipeStepsDetails);
             //String[] array;
@@ -173,13 +176,28 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                     int position = (int) recipeStepTextView.getTag();
                     String s = Integer.toString(position);
                     Log.d("stepclicked",""+recipeSteps[position]);
-                    Intent intent = new Intent(view.getContext(),RecipeDetailStepActivity.class);
-                    intent.putExtra("recipeStepTitle",recipeStepTextView.getText().toString());
-                    intent.putExtra("recipeStepDetails",recipeSteps[position]);
-                    intent.putExtra("recipestepsarray",recipeSteps);
-                    intent.putExtra("adapterposition",position);
+                    if(mtabView == false) {
+                        Intent intent = new Intent(view.getContext(), RecipeDetailStepActivity.class);
+                        intent.putExtra("recipeStepTitle", recipeStepTextView.getText().toString());
+                        intent.putExtra("recipeStepDetails", recipeSteps[position]);
+                        intent.putExtra("recipestepsarray", recipeSteps);
+                        intent.putExtra("adapterposition", position);
 
-                    context.startActivity(intent);
+                        context.startActivity(intent);
+                    }
+                    else{
+                        Bundle b = new Bundle();
+                                b.putString("recipeStepTitle",recipeStepTextView.getText().toString());
+                                b.putString("recipeStepDetails", recipeSteps[position]);
+                                b.putStringArray("recipestepsarray", recipeSteps);
+                                b.putInt("adapterposition", position);
+                        Log.d("InRecipestepsAdapter","mtabview"+String.valueOf(mtabView));
+                        RecipeDetailStepsFragment recipestepFragment =new RecipeDetailStepsFragment();
+                        android.support.v4.app.FragmentManager fragmentManager = myParentActivity.getSupportFragmentManager();
+                        recipestepFragment.setArguments(b);
+                        fragmentManager.beginTransaction()
+                                .add(R.id.step_container, recipestepFragment).commit();
+                    }
                     //getRecipeDetails(recipeJSONStr,)
 //                    try {
 //                     //   getRecipeDetails(recipeJSONStr,recipeStepTextView.getText().toString());

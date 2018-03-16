@@ -23,13 +23,6 @@
         android:id="@+id/stepVideoExoPlayer"
         android:layout_width="match_parent"
         android:layout_height="250dp"></com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-    <ImageView
-        android:id="@+id/noVideoImage"
-        android:src="@drawable/no_video_image"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:visibility="invisible"
-        android:contentDescription="video url is empty" />
 
     <RelativeLayout
         android:layout_width="match_parent"

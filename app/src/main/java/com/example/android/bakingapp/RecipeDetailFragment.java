@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.android.bakingapp.databinding.FragmentRecipeDetailsBinding;
+import com.example.android.bakingapp.databinding.RecipeStepCardBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,7 +93,8 @@ public class RecipeDetailFragment extends Fragment {
        // recipesStepsRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewRecipeStepsList);
         //recipesStepsRecyclerView.setLayoutManager(verticalLayoutManager);
         Log.d("RecipeDetailFragment","this");
-
+        boolean tabView =  RecipeDetailActivity.mTwoPane;
+        Log.d("IndetailFragment.java","tabview"+String.valueOf(tabView));
         if(getArguments()!= null) {
          strtext = getArguments().getString("recipeTitle");
          ingredientText = getArguments().getString("jsonstring");
@@ -115,7 +117,8 @@ public class RecipeDetailFragment extends Fragment {
                     break;
                 }
            }
-            recipeStepsAdapter = new RecipeStepsAdapter(mRecipeStepsList,recipeJSONStr,recipeStepDetails,getContext());
+
+            recipeStepsAdapter = new RecipeStepsAdapter(tabView, mRecipeStepsList,recipeJSONStr,recipeStepDetails,getContext());
          //   recipesStepsRecyclerView.setAdapter(recipeStepsAdapter);
             binding.idRecyclerViewRecipeStepsList.setAdapter(recipeStepsAdapter);
             recipeStepsAdapter.notifyDataSetChanged();

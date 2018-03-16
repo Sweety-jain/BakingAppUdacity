@@ -1,11 +1,15 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.GridView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.databinding.FragmentBakingRecipesBinding;
 
@@ -91,10 +96,28 @@ public class RecipeFragment extends Fragment {
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
      //   recipesRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewVerticaList);
+if(isOnline()) {
+    Connection connection = new Connection();
+    connection.execute();
+    binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
+}
+else{
+    try{
+        new AlertDialog.Builder(getContext())
+                .setTitle("Internet Connection")
+                .setMessage("Please check your internet connection")
+                .setIcon(R.drawable.ic_internet)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+}
 
-        Connection connection = new Connection();
-        connection.execute();
-binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the image resources to display
         Log.d("InRecipeFragment","jsonstrimng: "+recipeJSONStr);
@@ -117,7 +140,20 @@ binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
         // Return the root view*/
         return rootView;
     }
+ /*
+     * check for internet connection
+     */
 
+    private boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            Toast.makeText(getContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
 
     public class Connection extends AsyncTask<Void, Void, String[]>{
         private final String LOG_TAG = RecipeFragment.Connection.class.getSimpleName();

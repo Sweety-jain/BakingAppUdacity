@@ -54,6 +54,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     String recipeJSONStr;
     private int pos;
     String var[];
+    Boolean mTwoPane;
 
     public RecipesAdapter(ArrayList<Recipes> verticalList, String mrecipeJsonString, Context context) {
         this.verticalRecipesList = verticalList;
@@ -390,7 +391,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
         public RecipesViewHolder(View itemView) {
             super(itemView);
-
             String s = Integer.toString(pos);
             recipeTextView = (Button) itemView.findViewById(R.id.recipeTextViewId);
             recipeTextView.setOnClickListener(new View.OnClickListener() {
@@ -404,48 +404,51 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                    String[] recipeDesc;
                    String[] videoUrl;
                    String[] thumbNailUrl;
-                    Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    try {
-                        int i=0;
-                        ingredient=getRecipeIngredients(recipeJSONStr,recipeTextView.getText().toString());
-                        recipesteps =getRecipeShortDesc(recipeJSONStr,recipeTextView.getText().toString());
-                        recipeDesc = getRecipeDesc(recipeJSONStr,recipeTextView.getText().toString());
-                        videoUrl = getRecipeVideoUrl(recipeJSONStr,recipeTextView.getText().toString());
-                        thumbNailUrl =getRecipeThumbnail(recipeJSONStr,recipeTextView.getText().toString());
-                        recipeStepDetails=getRecipeDetails(recipeJSONStr,recipeTextView.getText().toString());
-                        String recipeStepsDesc =Arrays.toString(recipeDesc);
-                        String recipeVideoUrl = Arrays.toString(videoUrl);
-                        String recipeThumbnail = Arrays.toString(thumbNailUrl);
-                        String stepDetails  = Arrays.toString(recipeStepDetails);
-                        String r = Arrays.toString(recipesteps);
 
-                      Log.d("InREciepesteps",""+r);
+                       Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
+                       Bundle bundle = new Bundle();
+                       try {
+                           int i = 0;
+                           ingredient = getRecipeIngredients(recipeJSONStr, recipeTextView.getText().toString());
+                           recipesteps = getRecipeShortDesc(recipeJSONStr, recipeTextView.getText().toString());
+                           recipeDesc = getRecipeDesc(recipeJSONStr, recipeTextView.getText().toString());
+                           videoUrl = getRecipeVideoUrl(recipeJSONStr, recipeTextView.getText().toString());
+                           thumbNailUrl = getRecipeThumbnail(recipeJSONStr, recipeTextView.getText().toString());
+                           recipeStepDetails = getRecipeDetails(recipeJSONStr, recipeTextView.getText().toString());
+                           String recipeStepsDesc = Arrays.toString(recipeDesc);
+                           String recipeVideoUrl = Arrays.toString(videoUrl);
+                           String recipeThumbnail = Arrays.toString(thumbNailUrl);
+                           String stepDetails = Arrays.toString(recipeStepDetails);
+                           String r = Arrays.toString(recipesteps);
 
-                      //  bundle.putString("recipeTitle", recipeTextView.getText().toString());
-                        //bundle.putString("jsonstring", ingredient);
-                        //bundle.putStringArray("recipeSteps",recipesteps);
-                     //  bundle.putString("recipesteps",recipesteps);
-                        //Log.d("string", "recipetitle" + recipeTextView.getText());
-                        intent.putExtra("recipeTitle", recipeTextView.getText());
-                        intent.putExtra("jsonstring", ingredient);
-                        intent.putExtra("recipeSteps",r);
-                        intent.putExtra("recipeStepDesc",recipeStepsDesc);
-                        intent.putExtra("recipeVideoUrl",recipeVideoUrl);
-                        intent.putExtra("recipeThumbnail",recipeThumbnail);
-                        intent.putExtra("recipeStepDetails",stepDetails);
-                      //  intent.putExtra("recipeSteps",Arrays.toString(recipesteps));
-                        Log.d("recipesteppppp",""+Arrays.toString(recipesteps));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                           Log.d("InREciepesteps", "" + r);
+
+                           //  bundle.putString("recipeTitle", recipeTextView.getText().toString());
+                           //bundle.putString("jsonstring", ingredient);
+                           //bundle.putStringArray("recipeSteps",recipesteps);
+                           //  bundle.putString("recipesteps",recipesteps);
+                           //Log.d("string", "recipetitle" + recipeTextView.getText());
+                           intent.putExtra("recipeTitle", recipeTextView.getText());
+                           intent.putExtra("jsonstring", ingredient);
+                           intent.putExtra("recipeSteps", r);
+                           intent.putExtra("recipeStepDesc", recipeStepsDesc);
+                           intent.putExtra("recipeVideoUrl", recipeVideoUrl);
+                           intent.putExtra("recipeThumbnail", recipeThumbnail);
+                           intent.putExtra("recipeStepDetails", stepDetails);
+
+                           //  intent.putExtra("recipeSteps",Arrays.toString(recipesteps));
+                           Log.d("recipesteppppp", "" + Arrays.toString(recipesteps));
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
 
 // set Fragmentclass Arguments
-                    // RecipeDetailFragment fragobj = new RecipeDetailFragment();
-                    //fragobj.setArguments(bundle);
-                    //   Log.d("inRecipeAdapter","vertical list"+recipeJSONStr);
+                       // RecipeDetailFragment fragobj = new RecipeDetailFragment();
+                       //fragobj.setArguments(bundle);
+                       //   Log.d("inRecipeAdapter","vertical list"+recipeJSONStr);
 
-                    context.startActivity(intent);
+                       context.startActivity(intent);
+
 
                 }
             });
