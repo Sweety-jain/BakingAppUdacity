@@ -161,12 +161,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
             final String[] recipeSteps = mRecipeStepDetails.split("end");
             final RecipeDetailActivity myParentActivity = (RecipeDetailActivity)context;
 
-            // Log.d("Sweety",""+recipeStepsDetails);
-            //String[] array;
-
-         //  for(i=0;i<recipeSteps.length;i++){
-            //   Log.d("InRecipeStepViewHolder",""+ Arrays.toString(recipeSteps));
-           //}
             String s = Integer.toString(pos);
             recipeStepTextView = (Button) itemView.findViewById(R.id.recipeStepButtonId);
             Log.d("recipeStringng",""+recipeJSONStr);
@@ -198,34 +192,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                         fragmentManager.beginTransaction()
                                 .add(R.id.step_container, recipestepFragment).commit();
                     }
-                    //getRecipeDetails(recipeJSONStr,)
-//                    try {
-//                     //   getRecipeDetails(recipeJSONStr,recipeStepTextView.getText().toString());
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-                 //   Intent intent = new Intent(view.getContext(), RecipeStepActivity.class);
-                   // Bundle bundle = new Bundle();
-                  /*  String ingredient;
-                    Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    try {
-                        ingredient=getRecipeIngredients(recipeJSONStr,recipeTextView.getText().toString());
-                        bundle.putString("recipeTitle", recipeTextView.getText().toString());
-                        bundle.putString("jsonstring", ingredient);
-                        Log.d("string", "recipetitle" + recipeTextView.getText());
-                        intent.putExtra("recipeTitle", recipeTextView.getText());
-                        intent.putExtra("jsonstring", ingredient);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }*/
 
-// set Fragmentclass Arguments
-                    // RecipeDetailFragment fragobj = new RecipeDetailFragment();
-                    //fragobj.setArguments(bundle);
-                    //   Log.d("inRecipeAdapter","vertical list"+recipeJSONStr);
-
-                   // context.startActivity(intent);
 
                 }
             });
