@@ -74,7 +74,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
          binding = DataBindingUtil.inflate(inflater,R.layout.fragment_activity_recipe_detail_steps,container,false);
         final View rootView = binding.getRoot();
       //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
-        if(RecipeDetailActivity.mTwoPane == true){
+        if(RecipeDetailActivity.mTwoPane == true && RecipeDetailActivity.flag == true){
            String recipeDescriptionForTabvie = getArguments().getString("recipeDescription");
             binding.recipeStepId.setText(recipeDescriptionForTabvie);
             binding.recipeStepId.setVisibility(View.VISIBLE);
@@ -82,7 +82,10 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.previousStep.setVisibility(View.GONE);
             String videoUrlForTabView = getArguments().getString("recipeVideoUrl");
             videoUrl = videoUrlForTabView;
-        }else {
+           Log.d("hi","videoUrl"+videoUrlForTabView);
+
+        }
+        else {
 
             recipeDetails = getArguments().getString("recipeStepDetails");
              recipeStepsArray = getArguments().getStringArray("recipestepsarray");
@@ -94,6 +97,8 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.recipeStepId.setText(recipeSteps[1]);
             binding.recipeStepId.setVisibility(View.VISIBLE);
             videoUrl = recipeSteps[2];
+            Log.d("flag",""+RecipeDetailActivity.flag);
+            Log.d("hi22222222","videoUrl"+videoUrl);
             adapterPosition = getArguments().getInt("adapterposition");
             Log.d("adapterpositionnnn", "" + String.valueOf(adapterPosition));
         }
@@ -104,6 +109,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.noVideoImage.setVisibility(View.VISIBLE);
 
         }else {
+            Log.d("InRecipeCreateView","videoUrlinelse"+videoUrl);
             setUpViews(videoUrl);
         }
 

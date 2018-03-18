@@ -90,9 +90,10 @@ public class RecipeDetailFragment extends Fragment {
     //Connection connection = new Connection();
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.idRecyclerViewRecipeStepsList.setLayoutManager(verticalLayoutManager);
+
        // recipesStepsRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewRecipeStepsList);
         //recipesStepsRecyclerView.setLayoutManager(verticalLayoutManager);
-        Log.d("RecipeDetailFragment","this");
+        Log.d("InRecipestepsAdapter","this");
         boolean mTwoPane =RecipeDetailActivity.mTwoPane;
         if(getArguments()!= null) {
          strtext = getArguments().getString("recipeTitle");

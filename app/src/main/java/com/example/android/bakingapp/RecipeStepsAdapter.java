@@ -61,7 +61,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         this.mRecipeStepDetails = recipeStepDetails;
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
-        Log.d("inRecipeAdapter", "steps" + mRecipeStepDetails);
+        Log.d("inRecipeAdapter", "mtabview" + tabView);
         this.context = context;
         this.mtabView = tabView;
     }
@@ -163,7 +163,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
             String s = Integer.toString(pos);
             recipeStepTextView = (Button) itemView.findViewById(R.id.recipeStepButtonId);
-            Log.d("recipeStringng",""+recipeJSONStr);
+            Log.d("recipeStringng",""+s);
             recipeStepTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -185,12 +185,15 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                                 b.putString("recipeStepDetails", recipeSteps[position]);
                                 b.putStringArray("recipestepsarray", recipeSteps);
                                 b.putInt("adapterposition", position);
+                                b.putBoolean("flag",RecipeDetailActivity.flag);
+                                RecipeDetailActivity.flag = false;
                         Log.d("InRecipestepsAdapter","mtabview"+String.valueOf(mtabView));
                         RecipeDetailStepsFragment recipestepFragment =new RecipeDetailStepsFragment();
                         android.support.v4.app.FragmentManager fragmentManager = myParentActivity.getSupportFragmentManager();
+                        Log.d("myparentActivity",""+myParentActivity.getLocalClassName().toString());
                         recipestepFragment.setArguments(b);
                         fragmentManager.beginTransaction()
-                                .add(R.id.step_container, recipestepFragment).commit();
+                                .replace(R.id.step_container, recipestepFragment).commit();
                     }
 
 

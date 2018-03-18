@@ -38,6 +38,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private static final String RECIPE_MEASURE = "measure";
     private static final String RECIPE_INGREDIENT = "ingredient";
     public static boolean mTwoPane;
+    public static boolean flag;
     String mParam1;
     String strtext;
     private String recipeJSONStr;
@@ -65,34 +66,37 @@ public class RecipeDetailActivity extends AppCompatActivity {
         j = (String) b.get("recipeTitle");
         jsonStringToParse = (String) b.get("jsonstring");
         steps = (String) b.get("recipeSteps");
-        Log.d("steps of","steps:"+steps);
+      //  Log.d("steps of","steps:"+steps);
         stepDetails = (String) b.get("recipeStepDetails");
-        Log.d("steps ofrec","steps:"+stepDetails);
+        //Log.d("steps ofrec","steps:"+stepDetails);
         description = (String) b.get("recipeStepDesc");
       String[] descArray =  description.split(",");
 
-        Log.d("steps ofrddddddc","description:"+String.valueOf(descArray[0]));
+        //Log.d("steps ofrddddddc","description:"+String.valueOf(descArray[0]));
         videoUrl = (String) b.get("recipeVideoUrl");
         String[] videoUrlArray =  videoUrl.split(",");
 
-        Log.d("steps ofrddddddc","videourl:"+String.valueOf(videoUrlArray[0]).replace("[",""));
+        //Log.d("steps ofrddddddc","videourl:"+String.valueOf(videoUrlArray[0]).replace("[",""));
         thumbnailUrl = (String) b.get("recipeThumbnail");
-        Log.d("videoUrl", "" + videoUrl);
+        //Log.d("videoUrl", "" + videoUrl);
 
         if(savedInstanceState == null) {
             if (binding.stepContainer != null) {
                 mTwoPane = true;
-
+                Log.d("in two pane","mtwopane");
                 //  binding.titleStepToolbar.setTitle(j);
                 // toolbar.setTitle(j);
                 RecipeDetailFragment recipeTitleFragment = new RecipeDetailFragment();
                 android.support.v4.app.FragmentManager ftManager = getSupportFragmentManager();
                 recipeTitleFragment.setArguments(b);
 
+
                 ftManager.beginTransaction()
                         .add(R.id.title_container, recipeTitleFragment)
                         .commit();
 
+
+                flag = true;
                 RecipeDetailStepsFragment recipeDetailStepsFragment = new RecipeDetailStepsFragment();
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                Bundle bundle = new Bundle();
@@ -102,16 +106,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 recipeDetailStepsFragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.step_container,recipeDetailStepsFragment).commit();
 
-                //            recipestepFragment.setArguments(b);
-//
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.step_container, recipestepFragment).commit();
-//            RecipeDetailStepsFragment recipestepFragment = new RecipeDetailStepsFragment();
-//            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-//            recipestepFragment.setArguments(b);
-//
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.step_container, recipestepFragment).commit();
 
             } else {
                 mTwoPane = false;

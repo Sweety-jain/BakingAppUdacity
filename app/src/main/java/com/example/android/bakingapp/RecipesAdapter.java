@@ -59,7 +59,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     public RecipesAdapter(ArrayList<Recipes> verticalList, String mrecipeJsonString, Context context) {
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
-        Log.d("inRecipeAdapter", "json string" + recipeJSONStr);
+       // Log.d("inRecipeAdapter", "json string" + recipeJSONStr);
         this.context = context;
     }
 
@@ -421,7 +421,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                            String stepDetails = Arrays.toString(recipeStepDetails);
                            String r = Arrays.toString(recipesteps);
 
-                           Log.d("InREciepesteps", "" + r);
+                         //  Log.d("InREciepesteps", "" + r);
 
                            //  bundle.putString("recipeTitle", recipeTextView.getText().toString());
                            //bundle.putString("jsonstring", ingredient);
