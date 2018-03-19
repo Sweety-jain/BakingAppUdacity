@@ -101,6 +101,10 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             Log.d("hi22222222","videoUrl"+videoUrl);
             adapterPosition = getArguments().getInt("adapterposition");
             Log.d("adapterpositionnnn", "" + String.valueOf(adapterPosition));
+            if(RecipeDetailActivity.flag == false){
+                binding.nextStep.setVisibility(View.GONE);
+                binding.previousStep.setVisibility(View.GONE);
+            }
         }
 
         if(videoUrl.equals(" ")){
