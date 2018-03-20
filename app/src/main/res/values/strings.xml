@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">BakingApp</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">Nutella Pie</string>
     <string name="add_widget">Add widget</string>
+    <string name="ingredients"> Graham Cracker crumbs: 2 CUP\n unsalted butter, melted: 6 TBLSP\n
+     granulated sugar: 0.5 CUP\n salt: 1.5 TSP\n vanilla: 5 TBLSP\n  Nutella or other chocolate-hazelnut spread: 1 K
+    \n Mascapone Cheese(room temperature): 500 G\n heavy cream(cold): 1 CUP\n cream cheese(softened): 4 OZ</string>
+
+
 </resources>

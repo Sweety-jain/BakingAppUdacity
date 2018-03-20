@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 /**
  * Implementation of App Widget functionality.
@@ -16,13 +17,19 @@ public class BakingAppWidget extends AppWidgetProvider {
                                 int appWidgetId) {
 
         CharSequence widgetText = context.getString(R.string.appwidget_text);
+        CharSequence widgetText2 = context.getString(R.string.ingredients);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+
+
         Intent intent = new Intent(context,MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
         views.setTextViewText(R.id.appwidget_text, widgetText);
+       // views.addView(R.id.ingredientslabelId,views);
         views.setOnClickPendingIntent(R.id.appwidget_text,pendingIntent);
-
+      views.setTextViewText(R.id.ingredientsTVId,widgetText2);
+        views.setOnClickPendingIntent(R.id.ingredientsTVId,pendingIntent);
+       //views.setOnClickPendingIntent();
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

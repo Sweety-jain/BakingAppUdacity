@@ -1,21 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetLayoutId"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin"
+    android:minHeight="180dp"
+    android:minWidth="110dp">
 
     <TextView
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
+              android:layout_margin="8dp"
         android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
+        android:contentDescription="Nutella Pie"
+        android:text="Nutella Pie"
         android:textColor="#ffffff"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold|italic" />
 
+<TextView
+    android:id="@+id/ingredientslabelId"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ingredients:"
+    android:textStyle="bold"
+    android:layout_below="@id/appwidget_text"
+    android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/ingredientsTVId"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text=""
+        android:layout_below="@id/ingredientslabelId"
+        android:textSize="15sp"/>
 </RelativeLayout>

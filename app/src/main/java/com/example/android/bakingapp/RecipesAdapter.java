@@ -121,7 +121,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         getIngredients = getIngredients + ingredient + ": " + quantity + " " + measure + "\n ";
                     }
 
-                    Log.i(TAG,"Ingredients: "+ getIngredients);
+                    Log.d(TAG,"Ingredients: "+ getIngredients);
                     return getIngredients;
                 }
             }

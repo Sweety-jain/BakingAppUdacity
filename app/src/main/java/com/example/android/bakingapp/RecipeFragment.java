@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 
 public class RecipeFragment extends Fragment {
     FragmentBakingRecipesBinding binding;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private Parcelable listState;
    // private RecyclerView recipesRecyclerView;
   //  private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private static final String RECIPE_NAME = "name";
@@ -154,6 +157,15 @@ else{
         }
         return true;
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if ( binding.idRecyclerViewVerticaList != null) {
+
+            outState.putParcelable(KEY_RECYCLER_STATE,  binding.idRecyclerViewVerticaList.getLayoutManager().onSaveInstanceState());
+        }
+    }
+
 
     public class Connection extends AsyncTask<Void, Void, String[]>{
         private final String LOG_TAG = RecipeFragment.Connection.class.getSimpleName();
