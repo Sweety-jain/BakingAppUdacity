@@ -54,15 +54,11 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     SimpleExoPlayer exoPlayer;
     String videoUrl;
     private Long playPosition;
-   // private ImageView noVideoImage;
-   // private FloatingActionButton nextStep;
-   // private FloatingActionButton previousStep;
     private int adapterPosition;
+    private final String KEY_PLAYER_POSITION = "player_position";
     int recipeStepsArraySize;
     String[] recipeStepsArray;
    FragmentActivityRecipeDetailStepsBinding binding;
-   // private TextView recipeStepTv;
-    //private TextView recipeShortDescription;
 
     public RecipeDetailStepsFragment() {
 
@@ -71,6 +67,9 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            playPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION);
+        }
          binding = DataBindingUtil.inflate(inflater,R.layout.fragment_activity_recipe_detail_steps,container,false);
         final View rootView = binding.getRoot();
       //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
@@ -207,7 +206,12 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
         return rootView;
 
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (playPosition != null) {
+            outState.putLong(KEY_PLAYER_POSITION, playPosition);
+        }
+    }
     public void setUpViews(String videoUrl) {
         if (videoUrl.equals(" ")) {
             Log.d("inside if", "" + videoUrl);
@@ -215,6 +219,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
 
                    } else {
+
             try {
                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
                 LoadControl loadControl = new DefaultLoadControl();
@@ -226,10 +231,21 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
                // exoPlayerView.setPlayer(exoPlayer);
                 binding.stepVideoExoPlayer.setPlayer(exoPlayer);
+                exoPlayer.prepare(mediaSource);
+              //  exoPlayer.seekTo(200);
                 //exoPlayerView.setVisibility(View.VISIBLE);
                 binding.stepVideoExoPlayer.setVisibility(View.VISIBLE);
+
                 binding.noVideoImage.setVisibility(View.INVISIBLE);
-                exoPlayer.prepare(mediaSource);
+                if (playPosition != null) {
+                  //  exoPlayer.stop();
+                    Log.d("RecipeDetailStragment","playposition"+playPosition);
+                    exoPlayer.seekTo(playPosition);
+                }
+                else
+                    exoPlayer.seekTo(0);
+
+
                 exoPlayer.setPlayWhenReady(true);
 
             } catch (Exception e) {

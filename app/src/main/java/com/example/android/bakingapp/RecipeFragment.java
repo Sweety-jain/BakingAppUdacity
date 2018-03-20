@@ -54,6 +54,7 @@ public class RecipeFragment extends Fragment {
     private static final String RECIPE_INGREDIENT = "ingredient";
     String mParam1;
     String strtext;
+
     private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private String recipeJSONStr;
     private RecipesAdapter mRecipesAdapter;
