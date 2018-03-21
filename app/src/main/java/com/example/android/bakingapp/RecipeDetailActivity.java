@@ -76,6 +76,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         String[] videoUrlArray = videoUrl.split(",");
 
         thumbnailUrl = (String) b.get("recipeThumbnail");
+        String[] thumbnailUrlArray = thumbnailUrl.split(",");
         editor.putString("recipeTitle",j);
         editor.putString("ingredient",ingredient);
         //editor.apply();
@@ -102,6 +103,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 bundle.putBoolean("mTwoPane", mTwoPane);
                 bundle.putString("recipeDescription", String.valueOf(descArray[0]).replace("[", ""));
                 bundle.putString("recipeVideoUrl", String.valueOf(videoUrlArray[0]).replace("[", ""));
+                bundle.putString("thumbnailurl",String.valueOf(thumbnailUrlArray[0]).replace("[",""));
                 recipeDetailStepsFragment.setArguments(bundle);
                 fm.beginTransaction().add(R.id.step_container, recipeDetailStepsFragment).commit();
             } else {

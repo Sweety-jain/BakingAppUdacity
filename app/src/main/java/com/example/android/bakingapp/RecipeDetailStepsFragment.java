@@ -37,12 +37,14 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by sweety on 3/12/2018.
@@ -53,6 +55,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
     String videoUrl;
+    String thumbnailUrl;
     private Long playPosition;
     private int adapterPosition;
     private final String KEY_PLAYER_POSITION = "player_position";
@@ -79,7 +82,10 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.nextStep.setVisibility(View.GONE);
             binding.previousStep.setVisibility(View.GONE);
             String videoUrlForTabView = getArguments().getString("recipeVideoUrl");
+            String thumbnailurlfortabview = getArguments().getString("thumbnailurl");
             videoUrl = videoUrlForTabView;
+            thumbnailUrl = thumbnailurlfortabview;
+
         } else {
             recipeDetails = getArguments().getString("recipeStepDetails");
             recipeStepsArray = getArguments().getStringArray("recipestepsarray");
@@ -88,6 +94,8 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.recipeStepId.setText(recipeSteps[1]);
             binding.recipeStepId.setVisibility(View.VISIBLE);
             videoUrl = recipeSteps[2];
+            thumbnailUrl = recipeSteps[3];
+            Log.d("thumbnailurl",""+thumbnailUrl);
             adapterPosition = getArguments().getInt("adapterposition");
 
             if (RecipeDetailActivity.flag == false) {
@@ -97,6 +105,11 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
         }
 
         if (videoUrl.equals(" ")) {
+            if (thumbnailUrl.equals(" ")) {
+                binding.noVideoImage.setImageResource(R.drawable.no_video_image);
+            }else{
+                Picasso.with(getContext()).load(thumbnailUrl).into(binding.noVideoImage);
+            }
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
             binding.noVideoImage.setImageResource(R.drawable.no_video_image);
             binding.noVideoImage.setVisibility(View.VISIBLE);

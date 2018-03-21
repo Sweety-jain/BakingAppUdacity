@@ -45,6 +45,7 @@ public class RecipeFragment extends Fragment {
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private Parcelable listState;
     private static final String RECIPE_NAME = "name";
+    private static final String RECIPE_IMAGE = "image";
     private static final String TAG = "RecipeDetailFragment";
     private static final String RECIPE_INGREDIENTS = "ingredients";
     private static final String RECIPE_QUANTITY = "quantity";
@@ -54,6 +55,7 @@ public class RecipeFragment extends Fragment {
     String strtext;
 
     private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
+    private ArrayList<Recipes> mImageUrlList = new ArrayList();
     private String recipeJSONStr;
     private RecipesAdapter mRecipesAdapter;
 
@@ -141,6 +143,7 @@ public class RecipeFragment extends Fragment {
     public class Connection extends AsyncTask<Void, Void, String[]> {
         private final String LOG_TAG = RecipeFragment.Connection.class.getSimpleName();
 
+
         public String getRecipeIngredients(String recipeJson, String recipeName) throws JSONException {
 
             String getIngredients = "";
@@ -153,6 +156,7 @@ public class RecipeFragment extends Fragment {
 
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
+                String imageUrl = recipeDetails.getString(RECIPE_IMAGE);
 
                 if (name.equals(recipeName)) {
 
@@ -213,9 +217,12 @@ public class RecipeFragment extends Fragment {
                 recipeJSONStr = buffer.toString();
                 JSONArray response = new JSONArray(recipeJSONStr);
                 String[] recipeArray = new String[response.length()];
+                String[] recipeImageUrlArray = new String[response.length()];
                 for (int i = 0; i < response.length(); i++) {
 
                     recipeArray[i] = response.getJSONObject(i).getString("name");
+                    recipeImageUrlArray[i] = response.getJSONObject(i).getString("image");
+
                     JSONArray ingredientsArray = response.getJSONObject(i).getJSONArray("ingredients");
 
                     for (int j = 0; j < ingredientsArray.length(); j++) {
