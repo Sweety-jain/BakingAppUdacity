@@ -1,6 +1,7 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -17,23 +18,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+
 import android.content.Context;
-        import android.content.Intent;
-        import android.net.Uri;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
-        import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,11 +57,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     private int pos;
     String var[];
     Boolean mTwoPane;
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
     public RecipesAdapter(ArrayList<Recipes> verticalList, String mrecipeJsonString, Context context) {
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
-       // Log.d("inRecipeAdapter", "json string" + recipeJSONStr);
         this.context = context;
     }
 
@@ -74,7 +76,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     public void onBindViewHolder(RecipesViewHolder holder, int i) {
         holder.recipeTextView.setTag(i);
         pos = i;
-        //  holder.recipeTextView.setTag(i);
         recipeName = verticalRecipesList.get(i).getRecipeName();
         holder.recipeTextView.setText(recipeName);
     }
@@ -86,13 +87,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
     public class RecipesViewHolder extends RecyclerView.ViewHolder {
         Button recipeTextView;
-        public  String getRecipeIngredients(String recipeJson,String recipeName) throws JSONException {
+
+
+        public String getRecipeIngredients(String recipeJson, String recipeName) throws JSONException {
 
             String getIngredients = "";
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
 
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ) {
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
 
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
@@ -102,10 +105,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                 if (name.equals(recipeName)) {
 
                     JSONArray ingredientsArray = recipeDetails.getJSONArray(RECIPE_INGREDIENTS);
-                    Log.i(TAG,"ingredients: "+ingredientsArray);
+                    Log.i(TAG, "ingredients: " + ingredientsArray);
 
                     //get recipe details
-                    for (int j = 0; j < ingredientsArray.length(); j++ ){
+                    for (int j = 0; j < ingredientsArray.length(); j++) {
 
                         JSONObject ingredientDetails = ingredientsArray.getJSONObject(j);
 
@@ -121,7 +124,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         getIngredients = getIngredients + ingredient + ": " + quantity + " " + measure + "\n ";
                     }
 
-                    Log.d(TAG,"Ingredients: "+ getIngredients);
                     return getIngredients;
                 }
             }
@@ -129,146 +131,105 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             return null;
         }
 
-        public String[] getRecipeShortDesc(String recipeJson, String recipeName) throws JSONException{
+        public String[] getRecipeShortDesc(String recipeJson, String recipeName) throws JSONException {
             String[] getRecipeDetails;
 
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
 
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ){
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
 
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
 
-                if (name.equals(recipeName)){
+                if (name.equals(recipeName)) {
 
                     String RECIPE_STEPS = "steps";
                     JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                    Log.i(TAG,"steps: "+ steps);
+                    Log.i(TAG, "steps: " + steps);
 
                     int stepLength = steps.length();
-                    Log.i(TAG,"stepLength: "+ stepLength);
+                    Log.i(TAG, "stepLength: " + stepLength);
 
                     getRecipeDetails = new String[stepLength];
 
                     //get recipe details
-                    for (int j = 0; j < stepLength; j++ ){
-
-
-
+                    for (int j = 0; j < stepLength; j++) {
                         JSONObject recipeSteps = steps.getJSONObject(j);
 
                         //get short description
                         String RECIPE_SHORT_DESCRIPTION = "shortDescription";
                         String shortDescription = recipeSteps.getString(RECIPE_SHORT_DESCRIPTION);
-
-
-                        getRecipeDetails[j] = shortDescription ;
-                        Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
-
+                        getRecipeDetails[j] = shortDescription;
+                        Log.d("Steps of recipedetails", "" + getRecipeDetails[j]);
                     }
-
                     return getRecipeDetails;
-
                 }
-
             }
             return null;
-
         }
 
-        public String[] getRecipeDesc(String recipeJson, String recipeName) throws JSONException{
+        public String[] getRecipeDesc(String recipeJson, String recipeName) throws JSONException {
             String[] getRecipeDetails;
-
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
-
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ){
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
 
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
 
-                if (name.equals(recipeName)){
+                if (name.equals(recipeName)) {
 
                     String RECIPE_STEPS = "steps";
                     JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                    Log.i(TAG,"steps: "+ steps);
-
                     int stepLength = steps.length();
-                    Log.i(TAG,"stepLength: "+ stepLength);
-
                     getRecipeDetails = new String[stepLength];
-
                     //get recipe details
-                    for (int j = 0; j < stepLength; j++ ){
-
-
-
+                    for (int j = 0; j < stepLength; j++) {
                         JSONObject recipeSteps = steps.getJSONObject(j);
-
                         //get short description
                         String RECIPE_DESCRIPTION = "description";
                         String description = recipeSteps.getString(RECIPE_DESCRIPTION);
-
-
-                        getRecipeDetails[j] = description ;
-                        Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
-
+                        getRecipeDetails[j] = description;
                     }
-
                     return getRecipeDetails;
-
                 }
-
             }
             return null;
 
         }
-        public String[] getRecipeThumbnail(String recipeJson, String recipeName) throws JSONException{
+
+        public String[] getRecipeThumbnail(String recipeJson, String recipeName) throws JSONException {
             String[] getRecipeDetails;
 
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
-
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ){
-
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
-
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
-
-                if (name.equals(recipeName)){
-
+                if (name.equals(recipeName)) {
                     String RECIPE_STEPS = "steps";
                     JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                    Log.i(TAG,"steps: "+ steps);
+                    Log.i(TAG, "steps: " + steps);
 
                     int stepLength = steps.length();
-                    Log.i(TAG,"stepLength: "+ stepLength);
+                    Log.i(TAG, "stepLength: " + stepLength);
 
                     getRecipeDetails = new String[stepLength];
 
                     //get recipe details
-                    for (int j = 0; j < stepLength; j++ ){
-
-
-
+                    for (int j = 0; j < stepLength; j++) {
                         JSONObject recipeSteps = steps.getJSONObject(j);
-
                         //get short description
                         String RECIPE_THUMBNAILURL = "thumbnailURL";
                         String thumbnailUrl = recipeSteps.getString(RECIPE_THUMBNAILURL);
-
-
-                        getRecipeDetails[j] = thumbnailUrl ;
-                        Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
-
+                        getRecipeDetails[j] = thumbnailUrl;
                     }
-
                     return getRecipeDetails;
 
                 }
@@ -277,45 +238,34 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             return null;
 
         }
-        public String[] getRecipeVideoUrl(String recipeJson, String recipeName) throws JSONException{
+
+        public String[] getRecipeVideoUrl(String recipeJson, String recipeName) throws JSONException {
             String[] getRecipeDetails;
 
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
 
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ){
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
 
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
 
-                if (name.equals(recipeName)){
-
+                if (name.equals(recipeName)) {
                     String RECIPE_STEPS = "steps";
                     JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                    Log.i(TAG,"steps: "+ steps);
-
+                    Log.i(TAG, "steps: " + steps);
                     int stepLength = steps.length();
-                    Log.i(TAG,"stepLength: "+ stepLength);
-
+                    Log.i(TAG, "stepLength: " + stepLength);
                     getRecipeDetails = new String[stepLength];
-
                     //get recipe details
-                    for (int j = 0; j < stepLength; j++ ){
-
-
-
+                    for (int j = 0; j < stepLength; j++) {
                         JSONObject recipeSteps = steps.getJSONObject(j);
-
                         //get short description
                         String RECIPE_VIDEOURL = "videoURL";
                         String videoUrl = recipeSteps.getString(RECIPE_VIDEOURL);
-
-
-                        getRecipeDetails[j] = videoUrl ;
-                        Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
-
+                        getRecipeDetails[j] = videoUrl;
                     }
 
                     return getRecipeDetails;
@@ -326,58 +276,49 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
             return null;
 
         }
+
         @SuppressWarnings("JavaDoc")
-        public  String[] getRecipeDetails(String recipeJson, String recipeName) throws JSONException{
+        public String[] getRecipeDetails(String recipeJson, String recipeName) throws JSONException {
 
             String[] getRecipeDetails;
-
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
-
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ){
-
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
-
                 //get recipe name
                 String name = recipeDetails.getString(RECIPE_NAME);
-
-                if (name.equals(recipeName)){
-
+                if (name.equals(recipeName)) {
                     String RECIPE_STEPS = "steps";
                     JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                    Log.i(TAG,"steps: "+ steps);
+                    Log.i(TAG, "steps: " + steps);
 
                     int stepLength = steps.length();
-                    Log.i(TAG,"stepLength: "+ stepLength);
+                    Log.i(TAG, "stepLength: " + stepLength);
 
                     getRecipeDetails = new String[stepLength];
 
                     //get recipe details
-                    for (int j = 0; j < stepLength; j++ ){
+                    for (int j = 0; j < stepLength; j++) {
+                        JSONObject recipeSteps = steps.getJSONObject(j);
+                        //get short description
+                        String RECIPE_SHORT_DESCRIPTION = "shortDescription";
+                        String shortDescription = recipeSteps.getString(RECIPE_SHORT_DESCRIPTION);
 
+                        //get description
+                        String RECIPE_DESCRIPTION = "description";
+                        String description = recipeSteps.getString(RECIPE_DESCRIPTION);
 
+                        //get videoUrl
+                        String RECIPE_VIDEO_URL = "videoURL";
+                        String videoURL = recipeSteps.getString(RECIPE_VIDEO_URL);
 
-                            JSONObject recipeSteps = steps.getJSONObject(j);
+                        //get thumbnail url
+                        String THUMBNAIL_URL = "thumbnailURL";
+                        String thumbnailUrl = recipeSteps.getString(THUMBNAIL_URL);
 
-                            //get short description
-                            String RECIPE_SHORT_DESCRIPTION = "shortDescription";
-                            String shortDescription = recipeSteps.getString(RECIPE_SHORT_DESCRIPTION);
-
-                            //get description
-                            String RECIPE_DESCRIPTION = "description";
-                            String description = recipeSteps.getString(RECIPE_DESCRIPTION);
-
-                            //get videoUrl
-                            String RECIPE_VIDEO_URL = "videoURL";
-                            String videoURL = recipeSteps.getString(RECIPE_VIDEO_URL);
-
-                            //get thumbnail url
-                            String THUMBNAIL_URL = "thumbnailURL";
-                            String thumbnailUrl = recipeSteps.getString(THUMBNAIL_URL);
-
-                            getRecipeDetails[j] = shortDescription + "> " + description + "> "+
-                                    videoURL + "> " + thumbnailUrl + "end";
-                            Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
+                        getRecipeDetails[j] = shortDescription + "> " + description + "> " +
+                                videoURL + "> " + thumbnailUrl + "end";
+                        Log.d("Steps of recipedetails", "" + getRecipeDetails[j]);
 
                     }
 
@@ -392,6 +333,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
         public RecipesViewHolder(View itemView) {
             super(itemView);
             String s = Integer.toString(pos);
+
             recipeTextView = (Button) itemView.findViewById(R.id.recipeTextViewId);
             recipeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -399,63 +341,45 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                     int position = (int) recipeTextView.getTag();
                     String s = Integer.toString(position);
                     String ingredient;
-                   String[] recipesteps;
-                   String[] recipeStepDetails;
-                   String[] recipeDesc;
-                   String[] videoUrl;
-                   String[] thumbNailUrl;
+                    String[] recipesteps;
+                    String[] recipeStepDetails;
+                    String[] recipeDesc;
+                    String[] videoUrl;
+                    String[] thumbNailUrl;
 
-                       Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
-                       Bundle bundle = new Bundle();
-                       try {
-                           int i = 0;
-                           ingredient = getRecipeIngredients(recipeJSONStr, recipeTextView.getText().toString());
-                           recipesteps = getRecipeShortDesc(recipeJSONStr, recipeTextView.getText().toString());
-                           recipeDesc = getRecipeDesc(recipeJSONStr, recipeTextView.getText().toString());
-                           videoUrl = getRecipeVideoUrl(recipeJSONStr, recipeTextView.getText().toString());
-                           thumbNailUrl = getRecipeThumbnail(recipeJSONStr, recipeTextView.getText().toString());
-                           recipeStepDetails = getRecipeDetails(recipeJSONStr, recipeTextView.getText().toString());
-                           String recipeStepsDesc = Arrays.toString(recipeDesc);
-                           String recipeVideoUrl = Arrays.toString(videoUrl);
-                           String recipeThumbnail = Arrays.toString(thumbNailUrl);
-                           String stepDetails = Arrays.toString(recipeStepDetails);
-                           String r = Arrays.toString(recipesteps);
+                    Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    try {
+                        int i = 0;
+                        ingredient = getRecipeIngredients(recipeJSONStr, recipeTextView.getText().toString());
+                        recipesteps = getRecipeShortDesc(recipeJSONStr, recipeTextView.getText().toString());
+                        recipeDesc = getRecipeDesc(recipeJSONStr, recipeTextView.getText().toString());
+                        videoUrl = getRecipeVideoUrl(recipeJSONStr, recipeTextView.getText().toString());
+                        thumbNailUrl = getRecipeThumbnail(recipeJSONStr, recipeTextView.getText().toString());
+                        recipeStepDetails = getRecipeDetails(recipeJSONStr, recipeTextView.getText().toString());
+                        String recipeStepsDesc = Arrays.toString(recipeDesc);
+                        String recipeVideoUrl = Arrays.toString(videoUrl);
+                        String recipeThumbnail = Arrays.toString(thumbNailUrl);
+                        String stepDetails = Arrays.toString(recipeStepDetails);
+                        String r = Arrays.toString(recipesteps);
+                        intent.putExtra("ingredient",ingredient);
+                        intent.putExtra("recipeTitle", recipeTextView.getText());
+                        intent.putExtra("jsonstring", ingredient);
+                        intent.putExtra("recipeSteps", r);
+                        intent.putExtra("recipeStepDesc", recipeStepsDesc);
+                        intent.putExtra("recipeVideoUrl", recipeVideoUrl);
+                        intent.putExtra("recipeThumbnail", recipeThumbnail);
+                        intent.putExtra("recipeStepDetails", stepDetails);
 
-                         //  Log.d("InREciepesteps", "" + r);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                           //  bundle.putString("recipeTitle", recipeTextView.getText().toString());
-                           //bundle.putString("jsonstring", ingredient);
-                           //bundle.putStringArray("recipeSteps",recipesteps);
-                           //  bundle.putString("recipesteps",recipesteps);
-                           //Log.d("string", "recipetitle" + recipeTextView.getText());
-                           intent.putExtra("recipeTitle", recipeTextView.getText());
-                           intent.putExtra("jsonstring", ingredient);
-                           intent.putExtra("recipeSteps", r);
-                           intent.putExtra("recipeStepDesc", recipeStepsDesc);
-                           intent.putExtra("recipeVideoUrl", recipeVideoUrl);
-                           intent.putExtra("recipeThumbnail", recipeThumbnail);
-                           intent.putExtra("recipeStepDetails", stepDetails);
-
-                           //  intent.putExtra("recipeSteps",Arrays.toString(recipesteps));
-                           Log.d("recipesteppppp", "" + Arrays.toString(recipesteps));
-                       } catch (JSONException e) {
-                           e.printStackTrace();
-                       }
-
-// set Fragmentclass Arguments
-                       // RecipeDetailFragment fragobj = new RecipeDetailFragment();
-                       //fragobj.setArguments(bundle);
-                       //   Log.d("inRecipeAdapter","vertical list"+recipeJSONStr);
-
-                       context.startActivity(intent);
-
-
+                    context.startActivity(intent);
                 }
             });
         }
 
     }
-
-
 }
 

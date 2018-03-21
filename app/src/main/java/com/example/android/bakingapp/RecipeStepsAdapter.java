@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -57,11 +58,10 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     String var[];
     Boolean mtabView;
 
-    public RecipeStepsAdapter(Boolean tabView, ArrayList<RecipeSteps> verticalList, String mrecipeJsonString,String recipeStepDetails, Context context) {
+    public RecipeStepsAdapter(Boolean tabView, ArrayList<RecipeSteps> verticalList, String mrecipeJsonString, String recipeStepDetails, Context context) {
         this.mRecipeStepDetails = recipeStepDetails;
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
-        Log.d("inRecipeAdapter", "mtabview" + tabView);
         this.context = context;
         this.mtabView = tabView;
     }
@@ -77,7 +77,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     public void onBindViewHolder(RecipesStepsViewHolder holder, int i) {
         holder.recipeStepTextView.setTag(i);
         pos = i;
-        //  holder.recipeTextView.setTag(i);
         recipeName = verticalRecipesList.get(i).getRecipeStepName();
         holder.recipeStepTextView.setText(recipeName);
     }
@@ -87,38 +86,34 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         return verticalRecipesList.size();
     }
 
-
     @SuppressWarnings("JavaDoc")
-    public  String[] getRecipeDetails(String recipeJson, String recipeName) throws JSONException{
+    public String[] getRecipeDetails(String recipeJson, String recipeName) throws JSONException {
 
         String[] getRecipeDetails;
 
         JSONArray recipeJsonArray = new JSONArray(recipeJson);
 
         //get name and store it in an array
-        for (int i = 0; i < recipeJsonArray.length(); i++ ){
+        for (int i = 0; i < recipeJsonArray.length(); i++) {
 
             JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
             //get recipe name
             String name = recipeDetails.getString(RECIPE_NAME);
 
-            if (name.equals(recipeName)){
+            if (name.equals(recipeName)) {
 
                 String RECIPE_STEPS = "steps";
                 JSONArray steps = recipeDetails.getJSONArray(RECIPE_STEPS);
-                Log.i(TAG,"steps: "+ steps);
+                Log.i(TAG, "steps: " + steps);
 
                 int stepLength = steps.length();
-                Log.i(TAG,"stepLength: "+ stepLength);
+                Log.i(TAG, "stepLength: " + stepLength);
 
                 getRecipeDetails = new String[stepLength];
 
                 //get recipe details
-                for (int j = 0; j < stepLength; j++ ){
-
-
-
+                for (int j = 0; j < stepLength; j++) {
                     JSONObject recipeSteps = steps.getJSONObject(j);
 
                     //get short description
@@ -137,10 +132,9 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                     String THUMBNAIL_URL = "thumbnailURL";
                     String thumbnailUrl = recipeSteps.getString(THUMBNAIL_URL);
 
-                    getRecipeDetails[j] = shortDescription + "> " + description + "> "+
+                    getRecipeDetails[j] = shortDescription + "> " + description + "> " +
                             videoURL + "> " + thumbnailUrl;
-                    getRecipeDetails[j].replaceAll("","");
-                    Log.d("Steps of recipedetails",""+getRecipeDetails[j]);
+                    getRecipeDetails[j].replaceAll("", "");
 
                 }
 
@@ -157,20 +151,18 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
         public RecipesStepsViewHolder(View itemView) {
             super(itemView);
-            int i=0;
+            int i = 0;
             final String[] recipeSteps = mRecipeStepDetails.split("end");
-            final RecipeDetailActivity myParentActivity = (RecipeDetailActivity)context;
+            final RecipeDetailActivity myParentActivity = (RecipeDetailActivity) context;
 
             String s = Integer.toString(pos);
             recipeStepTextView = (Button) itemView.findViewById(R.id.recipeStepButtonId);
-            Log.d("recipeStringng",""+s);
             recipeStepTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = (int) recipeStepTextView.getTag();
                     String s = Integer.toString(position);
-                    Log.d("stepclicked",""+recipeSteps[position]);
-                    if(mtabView == false) {
+                    if (mtabView == false) {
                         Intent intent = new Intent(view.getContext(), RecipeDetailStepActivity.class);
                         intent.putExtra("recipeStepTitle", recipeStepTextView.getText().toString());
                         intent.putExtra("recipeStepDetails", recipeSteps[position]);
@@ -178,19 +170,17 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                         intent.putExtra("adapterposition", position);
 
                         context.startActivity(intent);
-                    }
-                    else{
+                    } else {
                         Bundle b = new Bundle();
-                                b.putString("recipeStepTitle",recipeStepTextView.getText().toString());
-                                b.putString("recipeStepDetails", recipeSteps[position]);
-                                b.putStringArray("recipestepsarray", recipeSteps);
-                                b.putInt("adapterposition", position);
-                                b.putBoolean("flag",RecipeDetailActivity.flag);
-                                RecipeDetailActivity.flag = false;
-                        Log.d("InRecipestepsAdapter","mtabview"+String.valueOf(mtabView));
-                        RecipeDetailStepsFragment recipestepFragment =new RecipeDetailStepsFragment();
+                        b.putString("recipeStepTitle", recipeStepTextView.getText().toString());
+                        b.putString("recipeStepDetails", recipeSteps[position]);
+                        b.putStringArray("recipestepsarray", recipeSteps);
+                        b.putInt("adapterposition", position);
+                        b.putBoolean("flag", RecipeDetailActivity.flag);
+                        RecipeDetailActivity.flag = false;
+
+                        RecipeDetailStepsFragment recipestepFragment = new RecipeDetailStepsFragment();
                         android.support.v4.app.FragmentManager fragmentManager = myParentActivity.getSupportFragmentManager();
-                        Log.d("myparentActivity",""+myParentActivity.getLocalClassName().toString());
                         recipestepFragment.setArguments(b);
                         fragmentManager.beginTransaction()
                                 .replace(R.id.step_container, recipestepFragment).commit();

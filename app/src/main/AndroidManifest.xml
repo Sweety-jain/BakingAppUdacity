@@ -18,8 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailActivity" />
+        <activity android:name=".RecipeDetailActivity"
+            android:parentActivityName="com.example.android.bakingapp.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.bakingapp.MainActivity" />
+        </activity>
+
         <activity android:name=".RecipeDetailStepActivity" />
+        <service android:name=".BakingAppWidgetUpdated" />
 
         <receiver android:name=".BakingAppWidget">
             <intent-filter>

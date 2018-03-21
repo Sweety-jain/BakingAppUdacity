@@ -44,8 +44,6 @@ public class RecipeFragment extends Fragment {
     FragmentBakingRecipesBinding binding;
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private Parcelable listState;
-   // private RecyclerView recipesRecyclerView;
-  //  private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private static final String RECIPE_NAME = "name";
     private static final String TAG = "RecipeDetailFragment";
     private static final String RECIPE_INGREDIENTS = "ingredients";
@@ -58,7 +56,8 @@ public class RecipeFragment extends Fragment {
     private ArrayList<Recipes> mRecipeNamesList = new ArrayList();
     private String recipeJSONStr;
     private RecipesAdapter mRecipesAdapter;
-    public RecipeFragment(){
+
+    public RecipeFragment() {
 
     }
 
@@ -85,63 +84,33 @@ public class RecipeFragment extends Fragment {
         }
     }
 
-
-
-    // Inflates the GridView of all AndroidMe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_baking_recipes,container,false);
-        //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_baking_recipes, container, false);
         final View rootView = binding.getRoot();
-       // final View rootView = inflater.inflate(R.layout.fragment_baking_recipes, container, false);
-
-        // Get a reference to the GridView in the fragment_master_list xml layout file
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-     //   recipesRecyclerView = (RecyclerView) rootView.findViewById(R.id.idRecyclerViewVerticaList);
-if(isOnline()) {
-    Connection connection = new Connection();
-    connection.execute();
-    binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
-}
-else{
-    try{
-        new AlertDialog.Builder(getContext())
-                .setTitle("Internet Connection")
-                .setMessage("Please check your internet connection")
-                .setIcon(R.drawable.ic_internet)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-    }catch (Exception e){
-        e.printStackTrace();
-    }
-}
-
-        // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the image resources to display
-        Log.d("InRecipeFragment","jsonstrimng: "+recipeJSONStr);
-        Log.d("InRecipeFragment","recipe names: "+mRecipeNamesList);
-
-     //   MasterListAdapter mAdapter = new MasterListAdapter(getContext(), AndroidImageAssets.getAll());
-
-        // Set the adapter on the GridView
-        //gridView.setAdapter(mAdapter);
-
-        // Set a click listener on the gridView and trigger the callback onImageSelected when an item is clicked
-     /*   gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // Trigger the callback method and pass in the position that was clicked
-                mCallback.onImageSelected(position);
+        if (isOnline()) {
+            Connection connection = new Connection();
+            connection.execute();
+            binding.idRecyclerViewVerticaList.setLayoutManager(verticalLayoutManager);
+        } else {
+            try {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Internet Connection")
+                        .setMessage("Please check your internet connection")
+                        .setIcon(R.drawable.ic_internet)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-
-        // Return the root view*/
+        }
         return rootView;
     }
  /*
@@ -152,32 +121,33 @@ else{
         ConnectivityManager conMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
 
-        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+        if (netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()) {
             Toast.makeText(getContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if ( binding.idRecyclerViewVerticaList != null) {
+        if (binding.idRecyclerViewVerticaList != null) {
 
-            outState.putParcelable(KEY_RECYCLER_STATE,  binding.idRecyclerViewVerticaList.getLayoutManager().onSaveInstanceState());
+            outState.putParcelable(KEY_RECYCLER_STATE, binding.idRecyclerViewVerticaList.getLayoutManager().onSaveInstanceState());
         }
     }
 
 
-    public class Connection extends AsyncTask<Void, Void, String[]>{
+    public class Connection extends AsyncTask<Void, Void, String[]> {
         private final String LOG_TAG = RecipeFragment.Connection.class.getSimpleName();
 
-        public  String getRecipeIngredients(String recipeJson,String recipeName) throws JSONException {
+        public String getRecipeIngredients(String recipeJson, String recipeName) throws JSONException {
 
             String getIngredients = "";
             JSONArray recipeJsonArray = new JSONArray(recipeJson);
 
             //get name and store it in an array
-            for (int i = 0; i < recipeJsonArray.length(); i++ ) {
+            for (int i = 0; i < recipeJsonArray.length(); i++) {
 
                 JSONObject recipeDetails = recipeJsonArray.getJSONObject(i);
 
@@ -187,10 +157,10 @@ else{
                 if (name.equals(recipeName)) {
 
                     JSONArray ingredientsArray = recipeDetails.getJSONArray(RECIPE_INGREDIENTS);
-                    Log.i(TAG,"ingredients: "+ingredientsArray);
+                    Log.i(TAG, "ingredients: " + ingredientsArray);
 
                     //get recipe details
-                    for (int j = 0; j < ingredientsArray.length(); j++ ){
+                    for (int j = 0; j < ingredientsArray.length(); j++) {
 
                         JSONObject ingredientDetails = ingredientsArray.getJSONObject(j);
 
@@ -206,7 +176,7 @@ else{
                         getIngredients = getIngredients + ingredient + ": " + quantity + " " + measure + "< ";
                     }
 
-                    Log.i(TAG,"Ingredients: "+ getIngredients);
+                    Log.i(TAG, "Ingredients: " + getIngredients);
                     return getIngredients;
                 }
             }
@@ -241,38 +211,20 @@ else{
                     return null;
                 }
                 recipeJSONStr = buffer.toString();
-              //  final String name = "name";
-               // JSONObject moviesJson = new JSONObject(recipeJSONStr);
-               // String recipeName = moviesJson.getString("name");
-
                 JSONArray response = new JSONArray(recipeJSONStr);
-                String[] recipeArray =new String[response.length()];
-               // String[][] ingArray = new String[response.length()][];
+                String[] recipeArray = new String[response.length()];
                 for (int i = 0; i < response.length(); i++) {
 
-                    recipeArray[i]= response.getJSONObject(i).getString("name");
-                    JSONArray ingredientsArray= response.getJSONObject(i).getJSONArray("ingredients");
-                    // ingArray = new String[response.length()][ingredientsArray.length()];
-                    for(int j = 0;j<ingredientsArray.length();j++){
+                    recipeArray[i] = response.getJSONObject(i).getString("name");
+                    JSONArray ingredientsArray = response.getJSONObject(i).getJSONArray("ingredients");
+
+                    for (int j = 0; j < ingredientsArray.length(); j++) {
                         Double quantity = ingredientsArray.getJSONObject(j).getDouble("quantity");
                         String measure = ingredientsArray.getJSONObject(j).getString("measure");
                         String ingredient = ingredientsArray.getJSONObject(j).getString("ingredient");
-                        String recipeIngredients = ""+quantity.toString() + " "+measure + ":" +ingredient;
-                      //  ingArray[i][j]= recipeIngredients;
-
+                        String recipeIngredients = "" + quantity.toString() + " " + measure + ":" + ingredient;
                     }
-                  //  Log.d("recipeIngredients",""+ingArray[i][1]);
                 }
-            //    int l = moviesArrayForJson.length();
-              //  String s = String.valueOf(l);
-                //String[] reviews = new String[moviesArrayForJson.length()];
-              /*  for (int i = 0; i < moviesArrayForJson.length(); i++) {
-                    String review;
-                    JSONObject movieReview = moviesArrayForJson.getJSONObject(i);
-                    reviews[i] = movieReview.getString("content");
-                    Log.v("ReviewConnectionsss", "review" + reviews[i]);
-
-                }*/
 
                 return recipeArray;
 
@@ -306,8 +258,7 @@ else{
                         break;
                     }
                 }
-                Log.d("sweety","jsonstring"+recipeJSONStr);
-                mRecipesAdapter = new RecipesAdapter(mRecipeNamesList,recipeJSONStr,getContext());
+                mRecipesAdapter = new RecipesAdapter(mRecipeNamesList, recipeJSONStr, getContext());
                 binding.idRecyclerViewVerticaList.setAdapter(mRecipesAdapter);
                 mRecipesAdapter.notifyDataSetChanged();
             }

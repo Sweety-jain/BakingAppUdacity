@@ -45,7 +45,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by namit on 3/12/2018.
+ * Created by sweety on 3/12/2018.
  */
 
 public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
@@ -58,7 +58,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     private final String KEY_PLAYER_POSITION = "player_position";
     int recipeStepsArraySize;
     String[] recipeStepsArray;
-   FragmentActivityRecipeDetailStepsBinding binding;
+    FragmentActivityRecipeDetailStepsBinding binding;
 
     public RecipeDetailStepsFragment() {
 
@@ -67,95 +67,72 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             playPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION);
         }
-         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_activity_recipe_detail_steps,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_activity_recipe_detail_steps, container, false);
         final View rootView = binding.getRoot();
-      //  final View rootView = inflater.inflate(R.layout.fragment_activity_recipe_detail_steps, container, false);
-        if(RecipeDetailActivity.mTwoPane == true && RecipeDetailActivity.flag == true){
-           String recipeDescriptionForTabvie = getArguments().getString("recipeDescription");
+        if (RecipeDetailActivity.mTwoPane == true && RecipeDetailActivity.flag == true) {
+            String recipeDescriptionForTabvie = getArguments().getString("recipeDescription");
             binding.recipeStepId.setText(recipeDescriptionForTabvie);
             binding.recipeStepId.setVisibility(View.VISIBLE);
             binding.nextStep.setVisibility(View.GONE);
             binding.previousStep.setVisibility(View.GONE);
             String videoUrlForTabView = getArguments().getString("recipeVideoUrl");
             videoUrl = videoUrlForTabView;
-           Log.d("hi","videoUrl"+videoUrlForTabView);
-
-        }
-        else {
-
+        } else {
             recipeDetails = getArguments().getString("recipeStepDetails");
-             recipeStepsArray = getArguments().getStringArray("recipestepsarray");
+            recipeStepsArray = getArguments().getStringArray("recipestepsarray");
             recipeStepsArraySize = recipeStepsArray.length;
             final String[] recipeSteps = recipeDetails.split(">");
-            // recipeShortDescription.setText(recipeSteps[0]);
-            //   binding.recipeShortDescId.setText(recipeSteps[0]);
-            // recipeStepTv.setText(recipeSteps[1]);
             binding.recipeStepId.setText(recipeSteps[1]);
             binding.recipeStepId.setVisibility(View.VISIBLE);
             videoUrl = recipeSteps[2];
-            Log.d("flag",""+RecipeDetailActivity.flag);
-            Log.d("hi22222222","videoUrl"+videoUrl);
             adapterPosition = getArguments().getInt("adapterposition");
-            Log.d("adapterpositionnnn", "" + String.valueOf(adapterPosition));
-            if(RecipeDetailActivity.flag == false){
+
+            if (RecipeDetailActivity.flag == false) {
                 binding.nextStep.setVisibility(View.GONE);
                 binding.previousStep.setVisibility(View.GONE);
             }
         }
 
-        if(videoUrl.equals(" ")){
+        if (videoUrl.equals(" ")) {
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
             binding.noVideoImage.setImageResource(R.drawable.no_video_image);
             binding.noVideoImage.setVisibility(View.VISIBLE);
 
-        }else {
-            Log.d("InRecipeCreateView","videoUrlinelse"+videoUrl);
+        } else {
             setUpViews(videoUrl);
         }
-
-
         binding.nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(adapterPosition == -1)
-                {
+                if (adapterPosition == -1) {
                     adapterPosition = adapterPosition + 2;
-                }else {
+                } else {
                     adapterPosition = adapterPosition + 1;
                 }
-                Log.d("adapterPosition", "" + String.valueOf(adapterPosition));
-                Log.d("recipesteparraysize",""+String.valueOf(recipeStepsArraySize));
-                if(adapterPosition == recipeStepsArraySize-1){
+                if (adapterPosition == recipeStepsArraySize - 1) {
                     binding.nextStep.setVisibility(View.GONE);
-                   binding.previousStep.setVisibility(View.VISIBLE);
-                }else {
-                    if(exoPlayer != null)
-                    exoPlayer.stop();
-                    // getActivity().setTitle("hi");
-                   // recipeStepTv.setVisibility(View.VISIBLE);
+                    binding.previousStep.setVisibility(View.VISIBLE);
+                } else {
+                    if (exoPlayer != null)
+                        exoPlayer.stop();
                     binding.recipeStepId.setVisibility(View.VISIBLE);
-                  //  recipeShortDescription.setVisibility((View.VISIBLE));
-                 //   binding.recipeShortDescId.setVisibility((View.VISIBLE));
                     String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
-                  //  recipeShortDescription.setText(recipeStepsArr[0]);
-                  //  binding.recipeShortDescId.setText(recipeStepsArr[0]);
-                  //  recipeStepTv.setText(recipeStepsArr[1]);
-                    binding.recipeStepId.setText(recipeStepsArr[1].replace(","," "));
+                    binding.recipeStepId.setText(recipeStepsArr[1].replace(",", " "));
                     videoUrl = recipeStepsArr[2];
-                    if(videoUrl.equals(" ")){
+                    if (videoUrl.equals(" ")) {
                         binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
                         binding.noVideoImage.setImageResource(R.drawable.no_video_image);
                         binding.noVideoImage.setVisibility(View.VISIBLE);
 
-                    }else {
+                    } else {
                         setUpViews(videoUrl);
                         binding.noVideoImage.setVisibility(View.INVISIBLE);
                     }
-                   binding.nextStep.setVisibility(View.VISIBLE);
+                    binding.nextStep.setVisibility(View.VISIBLE);
                     binding.previousStep.setVisibility(View.VISIBLE);
                 }
 
@@ -165,40 +142,32 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
 
-                if(adapterPosition == recipeStepsArraySize-1){
-                    adapterPosition =adapterPosition - 2;
-                }else {
+                if (adapterPosition == recipeStepsArraySize - 1) {
+                    adapterPosition = adapterPosition - 2;
+                } else {
                     adapterPosition = adapterPosition - 1;
                 }
-                Log.d("adapterPositionprev", "" + String.valueOf(adapterPosition));
-                if(adapterPosition == -1){
-                     binding.previousStep.setVisibility(View.GONE);
+                if (adapterPosition == -1) {
+                    binding.previousStep.setVisibility(View.GONE);
                     binding.nextStep.setVisibility(View.VISIBLE);
-                }else {
-                    if(exoPlayer !=null)
-                    exoPlayer.stop();
-                    // getActivity().setTitle("hi");
-                 //   recipeStepTv.setVisibility(View.VISIBLE);
+                } else {
+                    if (exoPlayer != null)
+                        exoPlayer.stop();
                     binding.recipeStepId.setVisibility(View.VISIBLE);
-                  //  recipeShortDescription.setVisibility(View.VISIBLE);
-                  //  binding.recipeShortDescId.setVisibility(View.VISIBLE);
                     String[] recipeStepsArr = recipeStepsArray[adapterPosition].split(">");
-                    //recipeShortDescription.setText(recipeStepsArr[0]);
-                    //binding.recipeShortDescId.setText(recipeStepsArr[0]);
-                  //  recipeStepTv.setText(recipeStepsArr[1]);
                     binding.recipeStepId.setText(recipeStepsArr[1]);
                     videoUrl = recipeStepsArr[2];
-                    if(videoUrl.equals(" ")){
+                    if (videoUrl.equals(" ")) {
                         binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
                         binding.noVideoImage.setImageResource(R.drawable.no_video_image);
                         binding.noVideoImage.setVisibility(View.VISIBLE);
 
-                    }else {
+                    } else {
                         setUpViews(videoUrl);
                         binding.noVideoImage.setVisibility(View.INVISIBLE);
                     }
                     binding.previousStep.setVisibility(View.VISIBLE);
-                   binding.nextStep.setVisibility(View.VISIBLE);
+                    binding.nextStep.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -206,19 +175,19 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
         return rootView;
 
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (playPosition != null) {
             outState.putLong(KEY_PLAYER_POSITION, playPosition);
         }
     }
+
     public void setUpViews(String videoUrl) {
         if (videoUrl.equals(" ")) {
             Log.d("inside if", "" + videoUrl);
-           // exoPlayerView.setVisibility(View.INVISIBLE);
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
-
-                   } else {
+        } else {
 
             try {
                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -229,23 +198,14 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
                 DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
                 ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
                 MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
-               // exoPlayerView.setPlayer(exoPlayer);
                 binding.stepVideoExoPlayer.setPlayer(exoPlayer);
                 exoPlayer.prepare(mediaSource);
-              //  exoPlayer.seekTo(200);
-                //exoPlayerView.setVisibility(View.VISIBLE);
                 binding.stepVideoExoPlayer.setVisibility(View.VISIBLE);
-
                 binding.noVideoImage.setVisibility(View.INVISIBLE);
-                if (playPosition != null) {
-                  //  exoPlayer.stop();
-                    Log.d("RecipeDetailStragment","playposition"+playPosition);
+                if (playPosition != null)
                     exoPlayer.seekTo(playPosition);
-                }
                 else
                     exoPlayer.seekTo(0);
-
-
                 exoPlayer.setPlayWhenReady(true);
 
             } catch (Exception e) {
@@ -257,8 +217,6 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        // Log.i(TAG,"onPause");
-
         if (exoPlayer != null) {
             exoPlayer.setPlayWhenReady(false);
             playPosition = exoPlayer.getCurrentPosition();
@@ -266,6 +224,5 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             exoPlayer.release();
             exoPlayer = null;
         }
-
     }
 }

@@ -2,7 +2,9 @@ package com.example.android.bakingapp;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -42,18 +44,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
     String mParam1;
     String strtext;
     private String recipeJSONStr;
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
-      //  setContentView(R.layout.activity_recipe_detail);
-
-
-
-//
-
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
         String j;
@@ -63,56 +63,50 @@ public class RecipeDetailActivity extends AppCompatActivity {
         String videoUrl;
         String description;
         String thumbnailUrl;
+        String ingredient;
         j = (String) b.get("recipeTitle");
+        ingredient = (String)b.get("ingredient");
         jsonStringToParse = (String) b.get("jsonstring");
         steps = (String) b.get("recipeSteps");
-      //  Log.d("steps of","steps:"+steps);
         stepDetails = (String) b.get("recipeStepDetails");
-        //Log.d("steps ofrec","steps:"+stepDetails);
         description = (String) b.get("recipeStepDesc");
-      String[] descArray =  description.split(",");
+        String[] descArray = description.split(",");
 
-        //Log.d("steps ofrddddddc","description:"+String.valueOf(descArray[0]));
         videoUrl = (String) b.get("recipeVideoUrl");
-        String[] videoUrlArray =  videoUrl.split(",");
+        String[] videoUrlArray = videoUrl.split(",");
 
-        //Log.d("steps ofrddddddc","videourl:"+String.valueOf(videoUrlArray[0]).replace("[",""));
         thumbnailUrl = (String) b.get("recipeThumbnail");
-        //Log.d("videoUrl", "" + videoUrl);
-
-        if(savedInstanceState == null) {
+        editor.putString("recipeTitle",j);
+        editor.putString("ingredient",ingredient);
+        //editor.apply();
+        editor.commit();
+        BakingAppWidgetUpdated.startActionUpdateRecipeWidgets(RecipeDetailActivity.this);
+        String restoredText = sharedpreferences.getString("recipeTitle", null);
+        String ingredients = sharedpreferences.getString("ingredient", null);
+        Log.d("restored text",""+restoredText);
+        Log.d("ingredientsinsf",""+ingredients);
+        if (savedInstanceState == null) {
             if (binding.stepContainer != null) {
                 mTwoPane = true;
-                Log.d("in two pane","mtwopane");
-                //  binding.titleStepToolbar.setTitle(j);
-                // toolbar.setTitle(j);
+                Log.d("in two pane", "mtwopane");
                 RecipeDetailFragment recipeTitleFragment = new RecipeDetailFragment();
                 android.support.v4.app.FragmentManager ftManager = getSupportFragmentManager();
                 recipeTitleFragment.setArguments(b);
-
-
                 ftManager.beginTransaction()
                         .add(R.id.title_container, recipeTitleFragment)
                         .commit();
-
-
                 flag = true;
                 RecipeDetailStepsFragment recipeDetailStepsFragment = new RecipeDetailStepsFragment();
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-               Bundle bundle = new Bundle();
-               bundle.putBoolean("mTwoPane",mTwoPane);
-                bundle.putString("recipeDescription",String.valueOf(descArray[0]).replace("[",""));
-                bundle.putString("recipeVideoUrl",String.valueOf(videoUrlArray[0]).replace("[",""));
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("mTwoPane", mTwoPane);
+                bundle.putString("recipeDescription", String.valueOf(descArray[0]).replace("[", ""));
+                bundle.putString("recipeVideoUrl", String.valueOf(videoUrlArray[0]).replace("[", ""));
                 recipeDetailStepsFragment.setArguments(bundle);
-                fm.beginTransaction().add(R.id.step_container,recipeDetailStepsFragment).commit();
-
-
+                fm.beginTransaction().add(R.id.step_container, recipeDetailStepsFragment).commit();
             } else {
                 mTwoPane = false;
                 binding.titleStepToolbar.setTitle(j);
-
-                //  binding.titleStepToolbar.setTitle(j);
-                // toolbar.setTitle(j);
                 RecipeDetailFragment recipeTitleFragment = new RecipeDetailFragment();
                 android.support.v4.app.FragmentManager ftManager = getSupportFragmentManager();
                 recipeTitleFragment.setArguments(b);
@@ -124,7 +118,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
 
     }
-
 
 
 }

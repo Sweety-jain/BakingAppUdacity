@@ -13,32 +13,35 @@ import android.widget.TextView;
  */
 public class BakingAppWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,  String recipeName,String ingredients,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        CharSequence widgetText2 = context.getString(R.string.ingredients);
+
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
 
-        Intent intent = new Intent(context,MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-       // views.addView(R.id.ingredientslabelId,views);
-        views.setOnClickPendingIntent(R.id.appwidget_text,pendingIntent);
-      views.setTextViewText(R.id.ingredientsTVId,widgetText2);
-        views.setOnClickPendingIntent(R.id.ingredientsTVId,pendingIntent);
-       //views.setOnClickPendingIntent();
-        // Instruct the widget manager to update the widget
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        views.setTextViewText(R.id.appwidget_text, recipeName);
+        views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
+        views.setTextViewText(R.id.ingredientsTVId, ingredients);
+        views.setOnClickPendingIntent(R.id.ingredientsTVId, pendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
+        BakingAppWidgetUpdated.startActionUpdateRecipeWidgets(context);
+    }
+    public static void updateRecipeWidgets(Context context,AppWidgetManager appWidgetManager,
+                                           String recipeName,String ingredients,int[] appWidgetIds){
+
+        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager,recipeName,ingredients, appWidgetId);
         }
     }
 

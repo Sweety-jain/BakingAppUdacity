@@ -14,8 +14,7 @@
         android:layout_centerHorizontal="true"
               android:layout_margin="8dp"
         android:background="#09C"
-        android:contentDescription="Nutella Pie"
-        android:text="Nutella Pie"
+
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:textStyle="bold|italic" />
