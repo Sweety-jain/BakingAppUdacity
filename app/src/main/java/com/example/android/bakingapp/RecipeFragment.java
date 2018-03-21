@@ -142,7 +142,7 @@ public class RecipeFragment extends Fragment {
 
     public class Connection extends AsyncTask<Void, Void, String[]> {
         private final String LOG_TAG = RecipeFragment.Connection.class.getSimpleName();
-
+        String[] recipeImageUrlArray;
 
         public String getRecipeIngredients(String recipeJson, String recipeName) throws JSONException {
 
@@ -217,7 +217,7 @@ public class RecipeFragment extends Fragment {
                 recipeJSONStr = buffer.toString();
                 JSONArray response = new JSONArray(recipeJSONStr);
                 String[] recipeArray = new String[response.length()];
-                String[] recipeImageUrlArray = new String[response.length()];
+                recipeImageUrlArray = new String[response.length()];
                 for (int i = 0; i < response.length(); i++) {
 
                     recipeArray[i] = response.getJSONObject(i).getString("name");
@@ -262,10 +262,18 @@ public class RecipeFragment extends Fragment {
                 for (String recipeNamess : strings) {
                     while (recipeNamess != null) {
                         mRecipeNamesList.add(new Recipes(recipeNamess));
+
                         break;
                     }
                 }
-                mRecipesAdapter = new RecipesAdapter(mRecipeNamesList, recipeJSONStr, getContext());
+                for (String recipeImageNamess : recipeImageUrlArray) {
+                    while (recipeImageNamess != null) {
+                        mImageUrlList.add(new Recipes(recipeImageNamess));
+
+                        break;
+                    }
+                }
+                mRecipesAdapter = new RecipesAdapter(mRecipeNamesList, recipeImageUrlArray, recipeJSONStr, getContext());
                 binding.idRecyclerViewVerticaList.setAdapter(mRecipesAdapter);
                 mRecipesAdapter.notifyDataSetChanged();
             }

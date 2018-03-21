@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.android.bakingapp.databinding.FragmentRecipeDetailsBinding;
 import com.example.android.bakingapp.databinding.RecipeStepCardBinding;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +53,7 @@ public class RecipeDetailFragment extends Fragment {
     String stepsShortDesc;
     String description;
     String videoUrls;
+    String imageUrl;
     String thumbNails;
     String recipeStepDetails;
     private String recipeJSONStr;
@@ -66,6 +69,8 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_details, container, false);
         final View rootView = binding.getRoot();
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.imageViewId);
+
         RecyclerView.LayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.idRecyclerViewRecipeStepsList.setLayoutManager(verticalLayoutManager);
         boolean mTwoPane = RecipeDetailActivity.mTwoPane;
@@ -77,6 +82,7 @@ public class RecipeDetailFragment extends Fragment {
             videoUrls = getArguments().getString("recipeVideoUrl");
             thumbNails = getArguments().getString("recipeThumbnail");
             recipeStepDetails = getArguments().getString("recipeStepDetails");
+            imageUrl = getArguments().getString("imageUrl");
             int i = stepsShortDesc.length();
 
             String s = String.valueOf(i);
@@ -88,11 +94,18 @@ public class RecipeDetailFragment extends Fragment {
                 }
             }
 
-            recipeStepsAdapter = new RecipeStepsAdapter(mTwoPane, mRecipeStepsList, recipeJSONStr, recipeStepDetails, getContext());
+            recipeStepsAdapter = new RecipeStepsAdapter(mTwoPane, imageUrl, mRecipeStepsList, recipeJSONStr, recipeStepDetails, getContext());
             binding.idRecyclerViewRecipeStepsList.setAdapter(recipeStepsAdapter);
             recipeStepsAdapter.notifyDataSetChanged();
             binding.recipeStepTVId.setMovementMethod(new ScrollingMovementMethod());
             binding.recipeStepTVId.setText(ingredientText);
+            if (imageUrl.equals("") || imageUrl.equals(" ")) {
+                imageView.setImageResource(R.drawable.no_video_image);
+                imageView.setVisibility(View.GONE);
+            } else {
+                Picasso.with(getContext()).load(imageUrl).into(imageView);
+            }
+
         }
         return rootView;
 

@@ -7,8 +7,10 @@ package com.example.android.bakingapp;
 public class Recipes {
     public String mrecipeNames;
 
+
     Recipes(String recipeName) {
         mrecipeNames = recipeName;
+
     }
 
     public String getRecipeName() {

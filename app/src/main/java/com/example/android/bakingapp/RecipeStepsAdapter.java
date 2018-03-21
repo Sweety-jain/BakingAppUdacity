@@ -54,14 +54,16 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     private String recipeName;
     String mRecipeStepDetails;
     String recipeJSONStr;
+    String mimageUrl;
     private int pos;
     String var[];
     Boolean mtabView;
 
-    public RecipeStepsAdapter(Boolean tabView, ArrayList<RecipeSteps> verticalList, String mrecipeJsonString, String recipeStepDetails, Context context) {
+    public RecipeStepsAdapter(Boolean tabView, String imageUrl, ArrayList<RecipeSteps> verticalList, String mrecipeJsonString, String recipeStepDetails, Context context) {
         this.mRecipeStepDetails = recipeStepDetails;
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
+        this.mimageUrl = imageUrl;
         this.context = context;
         this.mtabView = tabView;
     }
@@ -79,6 +81,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         pos = i;
         recipeName = verticalRecipesList.get(i).getRecipeStepName();
         holder.recipeStepTextView.setText(recipeName);
+
     }
 
     @Override

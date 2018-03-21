@@ -51,17 +51,20 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     private static final String RECIPE_MEASURE = "measure";
     private static final String RECIPE_INGREDIENT = "ingredient";
     private ArrayList<Recipes> verticalRecipesList;
+    String[] mimageUrls;
     private Context context;
     private String recipeName;
     String recipeJSONStr;
     private int pos;
     String var[];
     Boolean mTwoPane;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
 
-    public RecipesAdapter(ArrayList<Recipes> verticalList, String mrecipeJsonString, Context context) {
+    public RecipesAdapter(ArrayList<Recipes> verticalList, String[] imageUrls, String mrecipeJsonString, Context context) {
         this.verticalRecipesList = verticalList;
         this.recipeJSONStr = mrecipeJsonString;
+        this.mimageUrls = imageUrls;
+        Log.d("imageUrls", "" + Arrays.toString(imageUrls));
         this.context = context;
     }
 
@@ -341,12 +344,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                     int position = (int) recipeTextView.getTag();
                     String s = Integer.toString(position);
                     String ingredient;
+                    String imageUrltoSend;
                     String[] recipesteps;
                     String[] recipeStepDetails;
                     String[] recipeDesc;
                     String[] videoUrl;
                     String[] thumbNailUrl;
-
+                    Log.d("mimageUrls", "ffff" + mimageUrls[position]);
                     Intent intent = new Intent(view.getContext(), RecipeDetailActivity.class);
                     Bundle bundle = new Bundle();
                     try {
@@ -362,7 +366,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         String recipeThumbnail = Arrays.toString(thumbNailUrl);
                         String stepDetails = Arrays.toString(recipeStepDetails);
                         String r = Arrays.toString(recipesteps);
-                        intent.putExtra("ingredient",ingredient);
+                        intent.putExtra("ingredient", ingredient);
                         intent.putExtra("recipeTitle", recipeTextView.getText());
                         intent.putExtra("jsonstring", ingredient);
                         intent.putExtra("recipeSteps", r);
@@ -370,6 +374,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
                         intent.putExtra("recipeVideoUrl", recipeVideoUrl);
                         intent.putExtra("recipeThumbnail", recipeThumbnail);
                         intent.putExtra("recipeStepDetails", stepDetails);
+                        intent.putExtra("imageUrl", mimageUrls[position]);
+                        Log.d("mimageUrls", "ffff" + mimageUrls[position]);
 
                     } catch (JSONException e) {
                         e.printStackTrace();

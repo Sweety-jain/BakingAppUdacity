@@ -15,9 +15,6 @@ import android.util.Log;
  */
 
 
-
-
-
 public class BakingAppWidgetUpdated extends IntentService {
 
     private static final String ACTION_UPDATE_RECIPE_WIDGETS = "com.example.android.bakingapp.update_baking_app_widget";
@@ -34,7 +31,7 @@ public class BakingAppWidgetUpdated extends IntentService {
 
         assert intent != null;
         final String action = intent.getAction();
-        if (ACTION_UPDATE_RECIPE_WIDGETS.equals(action)){
+        if (ACTION_UPDATE_RECIPE_WIDGETS.equals(action)) {
             handleActionUpdateRecipeWidgets();
         }
 
@@ -42,27 +39,27 @@ public class BakingAppWidgetUpdated extends IntentService {
 
     private void handleActionUpdateRecipeWidgets() {
 
-String title = "";
-String ingredients = "";
+        String title = "";
+        String ingredients = "";
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
-             title = prefs.getString("recipeTitle", null);
-             ingredients = prefs.getString("ingredient", null);
-Log.d("Stringtitle",""+title);
+        title = prefs.getString("recipeTitle", null);
+        ingredients = prefs.getString("ingredient", null);
+        Log.d("Stringtitle", "" + title);
 
 
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                    new ComponentName(this, BakingAppWidget.class));
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                new ComponentName(this, BakingAppWidget.class));
 
-            //Now update all widgets
-            BakingAppWidget.updateRecipeWidgets(this, appWidgetManager, title,
-                    ingredients, appWidgetIds);
-        }
+        //Now update all widgets
+        BakingAppWidget.updateRecipeWidgets(this, appWidgetManager, title,
+                ingredients, appWidgetIds);
+    }
 
 
-    public static void startActionUpdateRecipeWidgets(Context context){
-        Intent intent = new Intent(context,BakingAppWidgetUpdated.class);
+    public static void startActionUpdateRecipeWidgets(Context context) {
+        Intent intent = new Intent(context, BakingAppWidgetUpdated.class);
         intent.setAction(ACTION_UPDATE_RECIPE_WIDGETS);
         context.startService(intent);
     }

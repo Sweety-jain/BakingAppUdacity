@@ -13,13 +13,12 @@ import android.widget.TextView;
  */
 public class BakingAppWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,  String recipeName,String ingredients,
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, String recipeName, String ingredients,
                                 int appWidgetId) {
 
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-
 
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -36,12 +35,13 @@ public class BakingAppWidget extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         BakingAppWidgetUpdated.startActionUpdateRecipeWidgets(context);
     }
-    public static void updateRecipeWidgets(Context context,AppWidgetManager appWidgetManager,
-                                           String recipeName,String ingredients,int[] appWidgetIds){
+
+    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
+                                           String recipeName, String ingredients, int[] appWidgetIds) {
 
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager,recipeName,ingredients, appWidgetId);
+            updateAppWidget(context, appWidgetManager, recipeName, ingredients, appWidgetId);
         }
     }
 

@@ -25,7 +25,7 @@ public class RecipeDetailStepActivity extends AppCompatActivity {
         int position = b.getInt("adapterposition");
         String pos = String.valueOf(position);
         setToolbarTitle(title);
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             RecipeDetailStepsFragment recipestepFragment = new RecipeDetailStepsFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             recipestepFragment.setArguments(b);

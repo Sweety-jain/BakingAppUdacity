@@ -95,7 +95,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
             binding.recipeStepId.setVisibility(View.VISIBLE);
             videoUrl = recipeSteps[2];
             thumbnailUrl = recipeSteps[3];
-            Log.d("thumbnailurl",""+thumbnailUrl);
+            Log.d("thumbnailurl", "" + thumbnailUrl);
             adapterPosition = getArguments().getInt("adapterposition");
 
             if (RecipeDetailActivity.flag == false) {
@@ -107,7 +107,7 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
         if (videoUrl.equals(" ")) {
             if (thumbnailUrl.equals(" ")) {
                 binding.noVideoImage.setImageResource(R.drawable.no_video_image);
-            }else{
+            } else {
                 Picasso.with(getContext()).load(thumbnailUrl).into(binding.noVideoImage);
             }
             binding.stepVideoExoPlayer.setVisibility(View.INVISIBLE);
