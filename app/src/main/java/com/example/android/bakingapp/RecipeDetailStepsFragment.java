@@ -190,6 +190,35 @@ public class RecipeDetailStepsFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(exoPlayer == null){
+            try {
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                LoadControl loadControl = new DefaultLoadControl();
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(bandwidthMeter));
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+                Uri videoUri = Uri.parse(videoUrl);
+                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                MediaSource mediaSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
+                binding.stepVideoExoPlayer.setPlayer(exoPlayer);
+                exoPlayer.prepare(mediaSource);
+                binding.stepVideoExoPlayer.setVisibility(View.VISIBLE);
+                binding.noVideoImage.setVisibility(View.INVISIBLE);
+                if (playPosition != null)
+                    exoPlayer.seekTo(playPosition);
+                else
+                    exoPlayer.seekTo(0);
+                exoPlayer.setPlayWhenReady(true);
+
+            } catch (Exception e) {
+                Log.e("Exolplayere", "" + e);
+            }
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         if (playPosition != null) {
             outState.putLong(KEY_PLAYER_POSITION, playPosition);
