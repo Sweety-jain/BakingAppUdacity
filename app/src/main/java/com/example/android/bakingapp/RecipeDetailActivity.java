@@ -55,6 +55,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
+        setSupportActionBar(binding.titleStepToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         Intent iin = getIntent();
@@ -111,6 +113,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 fm.beginTransaction().add(R.id.step_container, recipeDetailStepsFragment).commit();
             } else {
                 mTwoPane = false;
+
                 binding.titleStepToolbar.setTitle(recipeTitle);
                 RecipeDetailFragment recipeTitleFragment = new RecipeDetailFragment();
                 android.support.v4.app.FragmentManager ftManager = getSupportFragmentManager();

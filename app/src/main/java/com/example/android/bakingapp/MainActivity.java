@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity implements RecipeFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.titleToolbar);
+        setSupportActionBar(toolbar);
         toolbar.setTitle("Let's Bake with me");
     }
 
